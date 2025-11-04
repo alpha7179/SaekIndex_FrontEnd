@@ -13,8 +13,9 @@ import {
   LineElement,
   TimeScale,
   PointElement,
+  ArcElement,
 } from 'chart.js';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
 import PageHeader from '../components/PageHeader';
 import { surveyAPI } from '../services/api';
@@ -31,7 +32,8 @@ ChartJS.register(
   Legend,
   LineElement,
   PointElement,
-  TimeScale
+  TimeScale,
+  ArcElement
 );
 
 const PageContainer = styled.div`
@@ -111,6 +113,11 @@ const StatsPage = () => {
   const q1Distributions = stats.question1Distribution || {};
   const q2Distributions = stats.question2Distribution || {};
   const q3Distributions = stats.question3Distribution || {};
+  const q4Distributions = stats.question4Distribution || {};
+  const q5Distributions = stats.question5Distribution || {};
+  const q6Distributions = stats.question6Distribution || {};
+  const q7Distributions = stats.question7Distribution || {};
+  const q8Distributions = stats.question8Distribution || {};
   
   const heatmapData = stats.heatmapData || [];
 
@@ -149,38 +156,57 @@ const StatsPage = () => {
     ],
   };
 
-  const q1ChartData = {
-    labels: Object.keys(q1Distributions).sort(),
-    datasets: [{
-      label: t('statsPage.q1_title'),
-      data: Object.values(q1Distributions),
-      backgroundColor: 'rgba(54, 162, 235, 0.5)',
-      borderColor: 'rgba(54, 162, 235, 1)',
-      borderWidth: 1,
-    }]
+  // Helper function to format chart data for pie charts
+  const formatPieChartData = (distribution, questionKey) => {
+    const responseOrder = [1, 2, 3, 4, 5];
+    const labels = responseOrder.filter(key => distribution[key] > 0);
+    const data = labels.map(key => distribution[key]);
+    
+    const colors = [
+      'rgba(255, 99, 132, 0.8)',   // never - red
+      'rgba(255, 159, 64, 0.8)',   // rarely - orange  
+      'rgba(255, 205, 86, 0.8)',   // sometimes - yellow
+      'rgba(75, 192, 192, 0.8)',   // often - teal
+      'rgba(54, 162, 235, 0.8)',   // always - blue
+    ];
+    
+    const borderColors = [
+      'rgba(255, 99, 132, 1)',
+      'rgba(255, 159, 64, 1)', 
+      'rgba(255, 205, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(54, 162, 235, 1)',
+    ];
+
+    return {
+      labels: labels.map(label => {
+        const labelMap = {
+          1: '전혀 없다',
+          2: '거의 없다', 
+          3: '가끔 있다',
+          4: '자주 있다',
+          5: '항상 그렇다'
+        };
+        return labelMap[label];
+      }),
+      datasets: [{
+        label: t(`statsPage.${questionKey}_title`),
+        data: data,
+        backgroundColor: colors.slice(0, labels.length),
+        borderColor: borderColors.slice(0, labels.length),
+        borderWidth: 1,
+      }]
+    };
   };
 
-  const q2ChartData = {
-    labels: Object.keys(q2Distributions).sort(),
-    datasets: [{
-      label: t('statsPage.q2_title'),
-      data: Object.values(q2Distributions),
-      backgroundColor: 'rgba(75, 192, 192, 0.5)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1,
-    }]
-  };
-
-  const q3ChartData = {
-    labels: Object.keys(q3Distributions).sort(),
-    datasets: [{
-      label: t('statsPage.q3_title'),
-      data: Object.values(q3Distributions),
-      backgroundColor: 'rgba(255, 159, 64, 0.5)',
-      borderColor: 'rgba(255, 159, 64, 1)',
-      borderWidth: 1,
-    }]
-  };
+  const q1ChartData = formatPieChartData(q1Distributions, 'q1');
+  const q2ChartData = formatPieChartData(q2Distributions, 'q2');
+  const q3ChartData = formatPieChartData(q3Distributions, 'q3');
+  const q4ChartData = formatPieChartData(q4Distributions, 'q4');
+  const q5ChartData = formatPieChartData(q5Distributions, 'q5');
+  const q6ChartData = formatPieChartData(q6Distributions, 'q6');
+  const q7ChartData = formatPieChartData(q7Distributions, 'q7');
+  const q8ChartData = formatPieChartData(q8Distributions, 'q8');
 
   const options = {
     responsive: true,
@@ -236,11 +262,12 @@ const StatsPage = () => {
           <p>{t('statsPage.nodata')}</p>
         )}
         <hr />
+        <ChartTitle>심리 평가 질문 응답 분포</ChartTitle>
         <Grid>
           <div>
             <ChartTitle>{t('statsPage.q1_heading')}</ChartTitle>
             {Object.keys(q1Distributions).length > 0 ? (
-              <Bar data={q1ChartData} options={options} />
+              <Pie data={q1ChartData} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
@@ -248,7 +275,7 @@ const StatsPage = () => {
           <div>
             <ChartTitle>{t('statsPage.q2_heading')}</ChartTitle>
             {Object.keys(q2Distributions).length > 0 ? (
-              <Bar data={q2ChartData} options={options} />
+              <Pie data={q2ChartData} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
@@ -256,7 +283,47 @@ const StatsPage = () => {
           <div>
             <ChartTitle>{t('statsPage.q3_heading')}</ChartTitle>
             {Object.keys(q3Distributions).length > 0 ? (
-              <Bar data={q3ChartData} options={options} />
+              <Pie data={q3ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q4_heading')}</ChartTitle>
+            {Object.keys(q4Distributions).length > 0 ? (
+              <Pie data={q4ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q5_heading')}</ChartTitle>
+            {Object.keys(q5Distributions).length > 0 ? (
+              <Pie data={q5ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q6_heading')}</ChartTitle>
+            {Object.keys(q6Distributions).length > 0 ? (
+              <Pie data={q6ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q7_heading')}</ChartTitle>
+            {Object.keys(q7Distributions).length > 0 ? (
+              <Pie data={q7ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q8_heading')}</ChartTitle>
+            {Object.keys(q8Distributions).length > 0 ? (
+              <Pie data={q8ChartData} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}

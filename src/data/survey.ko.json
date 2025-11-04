@@ -1,5 +1,18 @@
 [
   {
+    "name": "userId",
+    "label": "ID (ID를 기억해주세요!)",
+    "type": "number",
+    "min": 0,
+    "max": 9999,
+    "placeholder": "0~9999 사이의 숫자를 입력해주세요",
+    "validation": { 
+      "required": "필수 응답 문항입니다.",
+      "min": { "value": 0, "message": "0 이상의 숫자를 입력해주세요." },
+      "max": { "value": 9999, "message": "9999 이하의 숫자를 입력해주세요." }
+    }
+  },
+  {
     "name": "date",
     "label": "날짜",
     "type": "date",
@@ -22,48 +35,106 @@
   },
   {
     "name": "question1",
-    "label": "문항1",
-    "type": "checkbox",
+    "label": "1. 사람들과 함께 있을 때, 오히려 혼자라고 느낀 적이 있나요?",
+    "type": "radio",
     "options": [
-      { "value": "1", "label": "값1" },
-      { "value": "2", "label": "값2" },
-      { "value": "3", "label": "값3" },
-      { "value": "4", "label": "값4" },
-      { "value": "5", "label": "값5" }
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
     ],
     "validation": { "required": "필수 응답 문항입니다." }
   },
   {
     "name": "question2",
-    "label": "문항2",
+    "label": "2. 사소한 순간이 좋게 느껴진 적이 있나요?",
     "type": "radio",
     "options": [
-      { "value": "1", "label": "값1" },
-      { "value": "2", "label": "값2" },
-      { "value": "3", "label": "값3" },
-      { "value": "4", "label": "값4" },
-      { "value": "5", "label": "값5" }
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
     ],
     "validation": { "required": "필수 응답 문항입니다." }
   },
   {
     "name": "question3",
-    "label": "문항3",
-    "type": "select",
+    "label": "3. 최근에 소리지르고 싶었던 적이 있나요?",
+    "type": "radio",
     "options": [
-      { "value": "", "label": "선택", "disabled": true },
-      { "value": "1", "label": "값1" },
-      { "value": "2", "label": "값2" },
-      { "value": "3", "label": "값3" },
-      { "value": "4", "label": "값4" },
-      { "value": "5", "label": "값5" }
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
     ],
     "validation": { "required": "필수 응답 문항입니다." }
   },
   {
     "name": "question4",
-    "label": "문항4",
-    "type": "textarea",
-    "placeholder": "자유롭게 의견을 남겨주세요."
+    "label": "4. 최근에 멈칫했던 순간이 있었나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question5",
+    "label": "5. 괜히 조용해지고 싶은 날이 있었나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question6",
+    "label": "6. 최근에 시간이 빨리 가나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question7",
+    "label": "7. 똑같은 일이 반복돼서 답답했던 적이 있나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question8",
+    "label": "8. 별일 아닌데 순간적으로 심장이 빨리 뛴 적이 있나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
   }
 ]

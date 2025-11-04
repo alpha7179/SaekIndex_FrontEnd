@@ -3,14 +3,15 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 const FormGroup = styled.div`
-  margin-bottom: 2.5rem; 
+  margin-bottom: ${props => 
+    props.name && props.name.startsWith('question') ? '3rem' : '2rem'}; 
 `;
 const Label = styled.label`
   display: block;
   font-weight: 600;
   color: #555;
   margin-bottom: ${props => 
-    (props.type === 'radio' || props.type === 'checkbox') ? '1rem' : '0.5rem'};
+    (props.type === 'radio' || props.type === 'checkbox') ? '0.5rem' : '0.5rem'};
 `;
 const Input = styled.input`
   width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;
@@ -25,7 +26,7 @@ const Textarea = styled.textarea`
   width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; resize: vertical; min-height: 100px;
 `;
 const ErrorMessage = styled.span`
-  color: #ff4757; font-size: 0.875rem; margin-top: 0.25rem; display: block;
+  color: #ff4757; font-size: 0.875rem; margin-bottom: 1rem; display: block;
 `;
 const OptionWrapper = styled.div`
   display: flex; flex-direction: column; align-items: center; gap: 0.25rem; flex: 1;
@@ -54,11 +55,13 @@ const FormField = ({ label, name, type, register, errors, options, validation, m
   const watchedValue = watch ? watch(name) : undefined;
 
   return (
-    <FormGroup>
+    <FormGroup name={name}>
       <Label htmlFor={name} type={type}>
         {label}
         {validation?.required && <RequiredMark>*</RequiredMark>}
       </Label>
+      
+      {errors[name] && <ErrorMessage>{errors[name].message}</ErrorMessage>}
       
       {(() => {
         switch (type) {
@@ -79,7 +82,7 @@ const FormField = ({ label, name, type, register, errors, options, validation, m
                   min={min}
                   max={max}
                   value={watchedValue === undefined ? '' : watchedValue}
-                  onChange={(e) => { }}
+                  onChange={(e) => setValue(name, parseInt(e.target.value) || 0)}
                   disabled={readOnly}
                 />
               </RangeContainer>
@@ -96,10 +99,16 @@ const FormField = ({ label, name, type, register, errors, options, validation, m
             );
           case 'radio':
             return (
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
-                {options.map(option => (
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '2rem' }}>
+                {options.map((option, index) => (
                   <OptionWrapper key={option.value}>
-                    <input type="radio" value={option.value} {...register(name, validationRules)} disabled={readOnly} />
+                    <input 
+                      id={index === 0 ? name : `${name}-${option.value}`}
+                      type="radio" 
+                      value={option.value} 
+                      {...register(name, validationRules)} 
+                      disabled={readOnly} 
+                    />
                     <span>{option.label}</span>
                   </OptionWrapper>
                 ))}
@@ -108,9 +117,15 @@ const FormField = ({ label, name, type, register, errors, options, validation, m
           case 'checkbox':
             return (
               <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
-                {options.map(option => (
+                {options.map((option, index) => (
                   <OptionWrapper key={option.value}>
-                    <input type="checkbox" value={option.value} {...register(name, validationRules)} disabled={readOnly} />
+                    <input 
+                      id={index === 0 ? name : `${name}-${option.value}`}
+                      type="checkbox" 
+                      value={option.value} 
+                      {...register(name, validationRules)} 
+                      disabled={readOnly} 
+                    />
                     <span>{option.label}</span>
                   </OptionWrapper>
                 ))}
@@ -120,8 +135,6 @@ const FormField = ({ label, name, type, register, errors, options, validation, m
             return <Input id={name} type={type} {...register(name, validationRules)} {...rest} disabled={readOnly} />;
         }
       })()}
-
-      {errors[name] && <ErrorMessage>{errors[name].message}</ErrorMessage>}
     </FormGroup>
   );
 };

@@ -1,5 +1,18 @@
 [
   {
+    "name": "userId",
+    "label": "ID (Please remember ID!)",
+    "type": "number",
+    "min": 0,
+    "max": 9999,
+    "placeholder": "Please enter a number between 0~9999",
+    "validation": { 
+      "required": "This is a required field.",
+      "min": { "value": 0, "message": "Please enter a number 0 or greater." },
+      "max": { "value": 9999, "message": "Please enter a number 9999 or less." }
+    }
+  },
+  {
     "name": "date",
     "label": "Date",
     "type": "date",
@@ -10,7 +23,7 @@
     "label": "Name",
     "type": "text",
     "placeholder": "Please enter your name",
-    "validation": { "required": "It's a required question" }
+    "validation": { "required": "This is a required field." }
   },
   {
     "name": "age",
@@ -18,52 +31,110 @@
     "type": "range",
     "min": 1,
     "max": 100,
-    "validation": { "required": "It's a required question" }
+    "validation": { "required": "This is a required field." }
   },
   {
     "name": "question1",
-    "label": "Question1",
-    "type": "checkbox",
+    "label": "1. Have you ever felt alone when you were with people?",
+    "type": "radio",
     "options": [
-      { "value": "1", "label": "value1" },
-      { "value": "2", "label": "value2" },
-      { "value": "3", "label": "value3" },
-      { "value": "4", "label": "value4" },
-      { "value": "5", "label": "value5" }
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
     ],
-    "validation": { "required": "It's a required question" }
+    "validation": { "required": "This is a required field." }
   },
   {
     "name": "question2",
-    "label": "Question2",
+    "label": "2. Have you ever felt good about small moments?",
     "type": "radio",
     "options": [
-      { "value": "1", "label": "value1" },
-      { "value": "2", "label": "value2" },
-      { "value": "3", "label": "value3" },
-      { "value": "4", "label": "value4" },
-      { "value": "5", "label": "value5" }
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
     ],
-    "validation": { "required": "It's a required question" }
+    "validation": { "required": "This is a required field." }
   },
   {
     "name": "question3",
-    "label": "Question3",
-    "type": "select",
+    "label": "3. Have you recently wanted to scream?",
+    "type": "radio",
     "options": [
-      { "value": "", "label": "select", "disabled": true },
-      { "value": "1", "label": "value1" },
-      { "value": "2", "label": "value2" },
-      { "value": "3", "label": "value3" },
-      { "value": "4", "label": "value4" },
-      { "value": "5", "label": "value5" }
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
     ],
-    "validation": { "required": "It's a required question" }
+    "validation": { "required": "This is a required field." }
   },
   {
     "name": "question4",
-    "label": "Question4",
-    "type": "textarea",
-    "placeholder": "Please enter the text"
+    "label": "4. Have you had a moment of hesitation recently?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question5",
+    "label": "5. Have you had days when you just wanted to be quiet?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question6",
+    "label": "6. Does time go by quickly recently?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question7",
+    "label": "7. Have you ever felt frustrated by repetitive tasks?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": 1 },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question8",
+    "label": "8. Has your heart ever beat fast for no particular reason?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
   }
 ]
