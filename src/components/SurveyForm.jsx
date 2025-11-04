@@ -35,7 +35,7 @@ function SurveyForm() {
   const surveyData = surveys[i18n.language] || surveys.ko;
 
   const { register, handleSubmit, watch, setValue, formState: { errors }, reset } = useForm({
-    defaultValues: { date: today, age: 25, question3: '' }
+    defaultValues: { date: today, age: 25}
   });
 
   const onSubmit = async (data) => {
