@@ -4,43 +4,45 @@ React와 Vite를 기반으로 한 감정 분석 및 시각화 웹 애플리케�
 
 ## ✨ 주요 기능
 
-- 📋 **감정 설문조사**: 사용자의 감정 데이터를 수집하는 인터랙티브 설문 폼
-- 📊 **데이터 시각화**: Chart.js와 D3.js를 활용한 다양한 차트와 히트맵
+- 📋 **감정 설문조사**: 8개 심리 평가 질문으로 구성된 인터랙티브 설문 폼
+- 📊 **통계 시각화**: Chart.js와 D3.js를 활용한 다양한 차트 (히트맵, 바차트, 라인차트, 파이차트)
+- 🗂️ **관리자 대시보드**: 설문 데이터 CRUD 및 페이지네이션 기능
 - 🌐 **다국어 지원**: 한국어/영어 지원 (react-i18next)
 - 📱 **반응형 디자인**: 모바일과 데스크톱 모든 환경에서 최적화
-- 🎨 **감정 기반 UI**: Emotion을 활용한 동적 스타일링
+- 🎨 **감정 기반 UI**: Emotion을 활용한 그라디언트 스타일링
 - ⚡ **실시간 데이터**: React Query를 통한 효율적인 데이터 관리
 
 ## 🛠️ 기술 스택
 
 ### 핵심 프레임워크
 
-- **React 19** - 최신 React 기능 활용
-- **Vite** - 빠른 개발 서버와 빌드 도구
-- **React Router v7** - 클라이언트 사이드 라우팅
+- **React 19.1.1** - 최신 React 기능 활용
+- **Vite 7.1.2** - 빠른 개발 서버와 빌드 도구 (SWC 플러그인 사용)
+- **React Router v7.9.1** - 클라이언트 사이드 라우팅
 
 ### 상태 관리 & 데이터
 
-- **@tanstack/react-query** - 서버 상태 관리
-- **React Hook Form** - 폼 상태 관리 및 유효성 검사
-- **Axios** - HTTP 클라이언트
+- **@tanstack/react-query v5.87.4** - 서버 상태 관리 및 캐싱
+- **React Hook Form v7.62.0** - 폼 상태 관리 및 유효성 검사
+- **Axios v1.12.1** - HTTP 클라이언트
 
 ### 스타일링
 
-- **@emotion/react & @emotion/styled** - CSS-in-JS 스타일링
-- **React Icons** - 아이콘 라이브러리
+- **@emotion/react & @emotion/styled v11.14.0** - CSS-in-JS 스타일링
+- **React Icons v5.5.0** - 아이콘 라이브러리
 
 ### 시각화
 
-- **Chart.js & react-chartjs-2** - 차트 라이브러리 (Chart.js v4.5.0, react-chartjs-2 v5.3.0)
-- **D3.js** - 커스텀 데이터 시각화 (히트맵)
-- **chartjs-adapter-moment** - 시간 축 어댑터
+- **Chart.js v4.5.0 & react-chartjs-2 v5.3.0** - 바차트, 라인차트, 파이차트
+- **D3.js v7.9.0** - 커스텀 히트맵 시각화
+- **chartjs-adapter-moment v1.0.1** - 시간 축 어댑터
+- **moment v2.30.1** - 날짜/시간 처리
 
 ### 국제화 & UX
 
-- **react-i18next** - 다국어 지원
-- **react-toastify** - 알림 메시지
-- **react-spinners** - 로딩 인디케이터
+- **react-i18next v16.0.0** - 다국어 지원
+- **react-toastify v11.0.5** - 알림 메시지
+- **react-spinners v0.17.0** - 로딩 인디케이터
 
 ## 🚀 시작하기
 
@@ -170,72 +172,78 @@ npm run lint
 ## 📁 프로젝트 구조
 
 ```
-FrontEnd/
+SaekIndex_FrontEnd/
 ├── public/                   # 정적 파일
-│   ├── locales/             # 다국어 번역 파일
-│   │   ├── en/
-│   │   │   └── translation.json
-│   │   └── ko/
-│   │       └── translation.json
-│   └── image/               # 이미지 파일
+│   └── locales/             # 다국어 번역 파일
+│       ├── en/
+│       │   └── translation.json
+│       └── ko/
+│           └── translation.json
 ├── src/
 │   ├── components/          # 재사용 가능한 컴포넌트
-│   │   ├── Footer.jsx       # 푸터 컴포넌트
-│   │   ├── FormField.jsx    # 폼 필드 컴포넌트
-│   │   ├── GradientIcon.jsx # 그라디언트 아이콘
-│   │   ├── Header.jsx       # 헤더 네비게이션
-│   │   ├── HeatmapChart.jsx # D3.js 히트맵 차트
-│   │   ├── NotFound.jsx     # 404 페이지
-│   │   ├── PageHeader.jsx   # 페이지 헤더
-│   │   ├── SurveyEditForm.jsx # 설문 편집 폼
-│   │   └── SurveyForm.jsx   # 설문 작성 폼
+│   │   ├── Footer.jsx       # 푸터 컴포넌트 (프로젝트 정보)
+│   │   ├── FormField.jsx    # 범용 폼 필드 (input, select, radio, range 등)
+│   │   ├── GradientIcon.jsx # SVG 그라디언트 아이콘 컴포넌트
+│   │   ├── Header.jsx       # 헤더 네비게이션 (언어 전환 포함)
+│   │   ├── HeatmapChart.jsx # D3.js 기반 히트맵 차트
+│   │   ├── NotFound.jsx     # 404 에러 페이지
+│   │   ├── PageHeader.jsx   # 페이지 제목 헤더
+│   │   ├── SurveyEditForm.jsx # 설문 편집/조회 폼 (관리자용)
+│   │   └── SurveyForm.jsx   # 설문 작성 폼 (사용자용)
 │   ├── pages/               # 페이지 컴포넌트
-│   │   ├── HomePage.jsx     # 메인 페이지
-│   │   ├── AnalyzePage.jsx  # 설문 분석 페이지
-│   │   ├── VisualizationPage.jsx # 시각화 페이지
-│   │   ├── AdminPage.jsx    # 관리자 페이지
-│   │   └── StatsPage.jsx    # 통계 페이지
+│   │   ├── HomePage.jsx     # 메인 랜딩 페이지
+│   │   ├── AnalyzePage.jsx  # 감정 설문조사 페이지
+│   │   ├── VisualizationPage.jsx # 시각화 페이지 (현재 빈 페이지)
+│   │   ├── AdminPage.jsx    # 관리자 페이지 (CRUD, 페이지네이션)
+│   │   └── StatsPage.jsx    # 통계 시각화 페이지 (차트 대시보드)
 │   ├── services/            # API 서비스
-│   │   └── api.jsx          # Axios 기반 API 클라이언트
-│   ├── data/                # 정적 데이터
-│   │   ├── survey.ko.json   # 한국어 설문 데이터
-│   │   └── survey.en.json   # 영어 설문 데이터
+│   │   └── api.jsx          # Axios 기반 백엔드 API 클라이언트
+│   ├── data/                # 정적 설문 데이터
+│   │   ├── survey.ko.json   # 한국어 설문 스키마 (8개 심리 질문)
+│   │   └── survey.en.json   # 영어 설문 스키마
 │   ├── styles/              # 글로벌 스타일
-│   │   └── GlobalStyles.jsx # Emotion 글로벌 스타일
+│   │   └── GlobalStyles.jsx # Emotion 글로벌 스타일 정의
 │   ├── assets/              # 정적 자원
-│   ├── App.jsx              # 메인 앱 컴포넌트
+│   │   └── react.svg        # React 로고
+│   ├── App.jsx              # 메인 앱 컴포넌트 (라우팅, 전역 상태)
 │   ├── main.jsx             # 애플리케이션 진입점
-│   ├── i18n.js              # 국제화 설정
-│   ├── App.css              # 앱 스타일
-│   └── index.css            # 기본 스타일
+│   ├── i18n.js              # react-i18next 국제화 설정
+│   ├── App.css              # 기본 앱 스타일
+│   └── index.css            # 글로벌 CSS 스타일
+├── .env.example             # 환경 변수 예시 파일
 ├── index.html               # HTML 템플릿
-├── vite.config.js           # Vite 설정
+├── vite.config.js           # Vite 설정 (React SWC 플러그인)
 ├── eslint.config.js         # ESLint 설정
-└── package.json             # 프로젝트 설정
+└── package.json             # 프로젝트 의존성 및 스크립트
 ```
 
 ## 🎯 주요 컴포넌트 설명
 
 ### 📄 페이지 컴포넌트
 
-- **HomePage**: 메인 랜딩 페이지, 서비스 소개 및 네비게이션
-- **AnalyzePage**: 감정 설문조사 페이지, 동적 폼 생성
-- **VisualizationPage**: 감정 데이터 시각화 결과 페이지
-- **AdminPage**: 설문 데이터 관리 및 CRUD 기능
-- **StatsPage**: 통계 대시보드, 다양한 차트와 히트맵
+- **HomePage**: 메인 랜딩 페이지, 그라디언트 아이콘과 카드 형태의 네비게이션
+- **AnalyzePage**: 감정 설문조사 페이지, 8개 심리 평가 질문 (5점 리커트 척도)
+- **VisualizationPage**: 시각화 페이지 (현재 헤더만 구현된 상태)
+- **AdminPage**: 설문 데이터 관리 페이지 (테이블, 페이지네이션, CRUD 기능)
+- **StatsPage**: 통계 대시보드 (히트맵, 바차트, 라인차트, 파이차트)
 
 ### 🧩 재사용 컴포넌트
 
-- **SurveyForm**: 동적 설문 폼, React Hook Form 기반
-- **HeatmapChart**: D3.js 기반 커스텀 히트맵 차트
-- **FormField**: 범용 폼 필드 컴포넌트 (input, select, radio, checkbox 등)
-- **Header/Footer**: 공통 레이아웃 컴포넌트
+- **SurveyForm**: React Hook Form 기반 동적 설문 폼, JSON 스키마 기반 렌더링
+- **SurveyEditForm**: 관리자용 설문 편집/조회 폼 (읽기 전용 모드 지원)
+- **HeatmapChart**: D3.js 기반 날짜/시간별 히트맵 시각화
+- **FormField**: 범용 폼 필드 (text, number, date, range, radio, select, textarea)
+- **Header**: 네비게이션 및 언어 전환 (KOR/ENG) 기능
+- **Footer**: 프로젝트 정보 및 링크
+- **PageHeader**: 아이콘과 제목/부제목을 포함한 페이지 헤더
+- **GradientIcon**: SVG 그라디언트 효과가 적용된 아이콘 컴포넌트
 
-### 🔧 유틸리티
+### 🔧 핵심 서비스 & 설정
 
-- **api.jsx**: Axios 기반 API 클라이언트, 백엔드와의 통신
-- **i18n.js**: react-i18next 설정, 다국어 지원
-- **GlobalStyles.jsx**: Emotion 기반 글로벌 스타일
+- **api.jsx**: 백엔드 API 통신 (설문 CRUD, 통계 조회)
+- **i18n.js**: react-i18next 다국어 설정 (한국어 기본, 영어 지원)
+- **survey.ko.json/en.json**: 설문 스키마 정의 (필드 타입, 유효성 검사, 옵션)
+- **GlobalStyles.jsx**: Emotion 기반 글로벌 CSS 스타일
 
 ## 🌐 다국어 지원
 
@@ -268,26 +276,43 @@ function MyComponent() {
 
 ## 📊 데이터 시각화
 
-### Chart.js 차트
+### Chart.js 기반 차트 (StatsPage)
 
-- **Bar Chart**: 연령대별 분포, 문항별 응답 비율
-- **Line Chart**: 시간별 설문 제출 추이
-- **Doughnut Chart**: 카테고리별 비율
+- **Bar Chart**: 연령대별 분포, 심리 평가 질문별 응답 분포
+- **Line Chart**: 일별/시간별 설문 제출 추이
+- **Pie Chart**: 각 심리 평가 질문(Q1-Q8)의 응답 비율 (5점 척도)
 
 ### D3.js 커스텀 차트
 
-- **Heatmap**: 날짜/시간대별 설문 제출 패턴 시각화
+- **Heatmap**: 날짜/시간대별 설문 제출 패턴 매트릭스 시각화
+
+### 통계 데이터 구조
+
+```javascript
+// 백엔드에서 제공하는 통계 데이터
+{
+  totalSurveys: 150,
+  dailyCount: [{ date: "2025-01-01", count: 5 }],
+  hourlyCount: [{ hour: 14, count: 3 }],
+  ageDistribution: [{ range: "20-29", count: 45 }],
+  question1Distribution: { "1": 10, "2": 20, "3": 50, "4": 40, "5": 30 },
+  // ... question2Distribution ~ question8Distribution
+  heatmapData: [{ date: "2025-01-01", hour: 14, count: 2 }]
+}
+```
 
 ### 사용 예시
 
 ```jsx
-import { Bar } from 'react-chartjs-2';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 import HeatmapChart from '../components/HeatmapChart';
 
 // Chart.js 사용
-<Bar data={chartData} options={options} />
+<Bar data={ageChartData} options={options} />
+<Line data={dailyChartData} />
+<Pie data={q1ChartData} />
 
-// D3.js 커스텀 차트 사용
+// D3.js 커스텀 히트맵
 <HeatmapChart data={heatmapData} />
 ```
 
@@ -313,32 +338,85 @@ const StyledButton = styled.button`
 
 ### 색상 팔레트
 
-- **Primary**: `#b84182ff` (핑크)
-- **Secondary**: `#ddc9bfff` (베이지)
-- **Accent**: `#F8EBE4` (연한 핑크)
-- **Text**: `#333d4b` (다크 그레이)
+- **Primary**: `#b84182ff` (핑크) - 메인 브랜드 컬러
+- **Secondary**: `#ddc9bfff` (베이지) - 보조 컬러
+- **Accent**: `#F8EBE4` (연한 핑크) - 강조 컬러
+- **Text**: `#333d4b` (다크 그레이) - 기본 텍스트
+- **Background**: `#f5f5f5` (라이트 그레이) - 페이지 배경
+
+### 그라디언트 효과
+
+```css
+/* 메인 그라디언트 */
+background: linear-gradient(135deg, #b84182ff 0%, #ddc9bfff 100%);
+
+/* 로고 텍스트 그라디언트 */
+background: linear-gradient(135deg, #b84182ff 0%, #f8ebe4 100%);
+-webkit-background-clip: text;
+color: transparent;
+```
 
 ## 🔄 상태 관리
 
 ### React Query 사용
 
 ```jsx
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { surveyAPI } from "../services/api";
 
-// 데이터 조회
+// 설문 목록 조회 (페이지네이션)
 const { data, isLoading, error } = useQuery({
-  queryKey: ["surveys"],
-  queryFn: surveyAPI.getSurveys,
+  queryKey: ["surveys", currentPage],
+  queryFn: () => surveyAPI.getSurveys(currentPage),
+  keepPreviousData: true,
 });
 
-// 데이터 변경
-const mutation = useMutation({
+// 통계 데이터 조회 (자동 새로고침)
+const { data: statsData } = useQuery({
+  queryKey: ["surveyStats"],
+  queryFn: surveyAPI.getSurveyStats,
+  refetchInterval: 10000, // 10초마다 새로고침
+});
+
+// 설문 생성
+const createMutation = useMutation({
   mutationFn: surveyAPI.createSurvey,
   onSuccess: () => {
-    // 성공 처리
+    toast.success("설문이 성공적으로 제출되었습니다!");
+    navigate("/");
   },
 });
+
+// 설문 삭제
+const deleteMutation = useMutation({
+  mutationFn: surveyAPI.deleteSurvey,
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["surveys"] });
+  },
+});
+```
+
+### React Hook Form 사용
+
+```jsx
+import { useForm } from "react-hook-form";
+
+const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
+  defaultValues: { date: today, age: 25 }
+});
+
+// 동적 폼 필드 렌더링
+{surveyData.map((field) => (
+  <FormField
+    key={field.name}
+    type={field.type}
+    name={field.name}
+    register={register}
+    errors={errors}
+    validation={field.validation}
+    options={field.options}
+  />
+))}
 ```
 
 ## 🚀 배포
@@ -2563,64 +2641,103 @@ const StatsPage = () => {
         <StatsButton to="/admin">관리자 페이지로 돌아가기</StatsButton>
       </TopActions>
       <Container>
-        <ChartTitle>
-          {t("statsPage.total_surveys", { count: stats.totalSurveys })}
-        </ChartTitle>
-        <ChartTitle>{t("statsPage.daily-hourly_heading")}</ChartTitle>
+        <ChartTitle>{t('statsPage.total_surveys', { count: stats.totalSurveys })}</ChartTitle>
+        <ChartTitle>{t('statsPage.daily-hourly_heading')}</ChartTitle>
         {heatmapData.length > 0 ? (
           <HeatmapChart data={heatmapData} />
         ) : (
-          <p>{t("statsPage.nodata")}</p>
+          <p>{t('statsPage.nodata')}</p>
         )}
         <Grid>
           <div>
-            <ChartTitle>{t("statsPage.daily_count_heading")}</ChartTitle>
+            <ChartTitle>{t('statsPage.daily_count_heading')}</ChartTitle>
             {dailyCounts.length > 0 ? (
               <Line data={dailyChartData} />
             ) : (
-              <p>{t("statsPage.nodata")}</p>
+              <p>{t('statsPage.nodata')}</p>
             )}
           </div>
           <div>
-            <ChartTitle>{t("statsPage.hourly_count_heading")}</ChartTitle>
+            <ChartTitle>{t('statsPage.hourly_count_heading')}</ChartTitle>
             {hourlyCounts.length > 0 ? (
               <Line data={hourlyChartData} />
             ) : (
-              <p>{t("statsPage.nodata")}</p>
+              <p>{t('statsPage.nodata')}</p>
             )}
           </div>
         </Grid>
         <hr />
-        <ChartTitle>{t("statsPage.age_distribution_heading")}</ChartTitle>
+        <ChartTitle>{t('statsPage.age_distribution_heading')}</ChartTitle>
         {ageDistributions.length > 0 ? (
           <Bar data={ageChartData} />
         ) : (
-          <p>{t("statsPage.nodata")}</p>
+          <p>{t('statsPage.nodata')}</p>
         )}
         <hr />
+        <ChartTitle>심리 평가 질문 응답 분포</ChartTitle>
         <Grid>
           <div>
-            <ChartTitle>{t("statsPage.q1_heading")}</ChartTitle>
+            <ChartTitle>{t('statsPage.q1_heading')}</ChartTitle>
             {Object.keys(q1Distributions).length > 0 ? (
-              <Bar data={q1ChartData} options={options} />
+              <Pie data={q1ChartData} />
             ) : (
-              <p>{t("statsPage.nodata")}</p>
+              <p>{t('statsPage.nodata')}</p>
             )}
           </div>
           <div>
-            <ChartTitle>{t("statsPage.q2_heading")}</ChartTitle>
+            <ChartTitle>{t('statsPage.q2_heading')}</ChartTitle>
             {Object.keys(q2Distributions).length > 0 ? (
-              <Bar data={q2ChartData} options={options} />
+              <Pie data={q2ChartData} />
             ) : (
-              <p>{t("statsPage.nodata")}</p>
+              <p>{t('statsPage.nodata')}</p>
             )}
           </div>
           <div>
-            <ChartTitle>{t("statsPage.q3_heading")}</ChartTitle>
+            <ChartTitle>{t('statsPage.q3_heading')}</ChartTitle>
             {Object.keys(q3Distributions).length > 0 ? (
-              <Bar data={q3ChartData} options={options} />
+              <Pie data={q3ChartData} />
             ) : (
-              <p>{t("statsPage.nodata")}</p>
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q4_heading')}</ChartTitle>
+            {Object.keys(q4Distributions).length > 0 ? (
+              <Pie data={q4ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q5_heading')}</ChartTitle>
+            {Object.keys(q5Distributions).length > 0 ? (
+              <Pie data={q5ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q6_heading')}</ChartTitle>
+            {Object.keys(q6Distributions).length > 0 ? (
+              <Pie data={q6ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q7_heading')}</ChartTitle>
+            {Object.keys(q7Distributions).length > 0 ? (
+              <Pie data={q7ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
+            )}
+          </div>
+          <div>
+            <ChartTitle>{t('statsPage.q8_heading')}</ChartTitle>
+            {Object.keys(q8Distributions).length > 0 ? (
+              <Pie data={q8ChartData} />
+            ) : (
+              <p>{t('statsPage.nodata')}</p>
             )}
           </div>
         </Grid>
@@ -2908,8 +3025,525 @@ export default StatsPage;
 }
 ```
 
+## 📋 설문 구조
+
+### 심리 평가 질문 (8개)
+
+1. **사회적 고립감**: "사람들과 함께 있을 때, 오히려 혼자라고 느낀 적이 있나요?"
+2. **긍정적 경험**: "사소한 순간이 좋게 느껴진 적이 있나요?"
+3. **분노/좌절감**: "최근에 소리지르고 싶었던 적이 있나요?"
+4. **망설임/불안**: "최근에 멈칫했던 순간이 있었나요?"
+5. **내향성**: "괜히 조용해지고 싶은 날이 있었나요?"
+6. **시간 인식**: "최근에 시간이 빨리 가나요?"
+7. **반복성 스트레스**: "똑같은 일이 반복돼서 답답했던 적이 있나요?"
+8. **신체적 불안**: "별일 아닌데 순간적으로 심장이 빨리 뛴 적이 있나요?"
+
+### 응답 척도 (5점 리커트)
+
+- **1점**: 전혀 없다 (Never)
+- **2점**: 거의 없다 (Rarely)
+- **3점**: 가끔 있다 (Sometimes)
+- **4점**: 자주 있다 (Often)
+- **5점**: 항상 그렇다 (Always)
+
+### 기본 정보 수집
+
+- **사용자 ID**: 0-9999 범위의 숫자 (추적용)
+- **이름**: 텍스트 입력
+- **나이**: 1-100 범위의 슬라이더
+- **날짜**: 자동 설정 (읽기 전용)
+
+## 🔗 API 엔드포인트
+
+```javascript
+// 백엔드 API 구조
+const API_BASE_URL = process.env.VITE_API_BASE_URL || 'http://localhost:4000';
+
+// 설문 관련 API
+POST   /api/surveys        // 설문 생성
+GET    /api/surveys?page=1 // 설문 목록 조회 (페이지네이션)
+PUT    /api/surveys/:id    // 설문 수정
+DELETE /api/surveys/:id    // 설문 삭제
+GET    /api/surveys/stats  // 통계 데이터 조회
+```
+
+## 🌟 주요 특징
+
+- **JSON 스키마 기반 폼**: 설문 구조를 JSON으로 정의하여 동적 렌더링
+- **실시간 통계**: React Query를 통한 10초 간격 자동 새로고침
+- **반응형 디자인**: 모바일/태블릿/데스크톱 모든 환경 지원
+- **접근성**: 시맨틱 HTML과 ARIA 속성 적용
+- **성능 최적화**: Vite + SWC를 통한 빠른 빌드와 HMR
+- **타입 안전성**: ESLint를 통한 코드 품질 관리
+
 ---
 
 **색인(SaekIn) 프론트엔드** - 감정을 통한 예술적 경험을 제공하는 웹 애플리케이션 🎨
 
-이제 FrontEnd 폴더에서 작업하는 개발자들이 이 README.md만 보고도 전체 프론트엔드 코드를 파악하고 개발을 시작할 수 있습니다!
+> 이 README는 현재 코드베이스를 기반으로 작성되었으며, 개발자가 프로젝트를 이해하고 기여할 수 있도록 상세한 정보를 제공합니다.
+
+#### 2-6. src/data/
+
+##### 2-6-1. src/data/survey.ko.json
+
+```json
+[
+  {
+    "name": "userId",
+    "label": "ID (ID를 기억해주세요!)",
+    "type": "number",
+    "min": 0,
+    "max": 9999,
+    "placeholder": "0~9999 사이의 숫자를 입력해주세요",
+    "validation": { 
+      "required": "필수 응답 문항입니다.",
+      "min": { "value": 0, "message": "0 이상의 숫자를 입력해주세요." },
+      "max": { "value": 9999, "message": "9999 이하의 숫자를 입력해주세요." }
+    }
+  },
+  {
+    "name": "date",
+    "label": "날짜",
+    "type": "date",
+    "readOnly": true
+  },
+  {
+    "name": "name",
+    "label": "이름",
+    "type": "text",
+    "placeholder": "이름을 입력해주세요",
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "age",
+    "label": "나이",
+    "type": "range",
+    "min": 1,
+    "max": 100,
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question1",
+    "label": "1. 사람들과 함께 있을 때, 오히려 혼자라고 느낀 적이 있나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question2",
+    "label": "2. 사소한 순간이 좋게 느껴진 적이 있나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question3",
+    "label": "3. 최근에 소리지르고 싶었던 적이 있나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question4",
+    "label": "4. 최근에 멈칫했던 순간이 있었나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question5",
+    "label": "5. 괜히 조용해지고 싶은 날이 있었나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question6",
+    "label": "6. 최근에 시간이 빨리 가나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question7",
+    "label": "7. 똑같은 일이 반복돼서 답답했던 적이 있나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  },
+  {
+    "name": "question8",
+    "label": "8. 별일 아닌데 순간적으로 심장이 빨리 뛴 적이 있나요?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "전혀 없다" },
+      { "value": 2, "label": "거의 없다" },
+      { "value": 3, "label": "가끔 있다" },
+      { "value": 4, "label": "자주 있다" },
+      { "value": 5, "label": "항상 그렇다" }
+    ],
+    "validation": { "required": "필수 응답 문항입니다." }
+  }
+]
+```
+
+##### 2-6-2. src/data/survey.en.json
+
+```json
+[
+  {
+    "name": "userId",
+    "label": "ID (Please remember ID!)",
+    "type": "number",
+    "min": 0,
+    "max": 9999,
+    "placeholder": "Please enter a number between 0~9999",
+    "validation": { 
+      "required": "This is a required field.",
+      "min": { "value": 0, "message": "Please enter a number 0 or greater." },
+      "max": { "value": 9999, "message": "Please enter a number 9999 or less." }
+    }
+  },
+  {
+    "name": "date",
+    "label": "Date",
+    "type": "date",
+    "readOnly": true
+  },
+  {
+    "name": "name",
+    "label": "Name",
+    "type": "text",
+    "placeholder": "Please enter your name",
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "age",
+    "label": "Age",
+    "type": "range",
+    "min": 1,
+    "max": 100,
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question1",
+    "label": "1. Have you ever felt alone when you were with people?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question2",
+    "label": "2. Have you ever felt good about small moments?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question3",
+    "label": "3. Have you recently wanted to scream?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question4",
+    "label": "4. Have you had a moment of hesitation recently?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question5",
+    "label": "5. Have you had days when you just wanted to be quiet?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question6",
+    "label": "6. Does time go by quickly recently?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question7",
+    "label": "7. Have you ever felt frustrated by repetitive tasks?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  },
+  {
+    "name": "question8",
+    "label": "8. Has your heart ever beat fast for no particular reason?",
+    "type": "radio",
+    "options": [
+      { "value": 1, "label": "Never" },
+      { "value": 2, "label": "Rarely" },
+      { "value": 3, "label": "Sometimes" },
+      { "value": 4, "label": "Often" },
+      { "value": 5, "label": "Always" }
+    ],
+    "validation": { "required": "This is a required field." }
+  }
+]
+```
+
+### 3. public/ 폴더
+
+#### 3-1. public/locales/ko/translation.json
+
+```json
+{
+  "menu": {
+    "home": "홈",
+    "analyze": "분석",
+    "visualization": "시각화"
+  },
+  "home": {
+    "title": "데이터 분석 및 시각화",
+    "subtitle": "설문조사를 통해 데이터를 분석하고 결과를 확인하세요.",
+    "card_analyze_title": "감정 분석 시작",
+    "card_analyze_desc": "감정 분석을 시작합니다.",
+    "card_viz_title": "감정 시각화 확인",
+    "card_viz_desc": "시각화 결과를 확인합니다."
+  },
+  "AnalyzePage": {
+    "title": "감정 분석",
+    "subtitle": "감정분석을 위해 설문을 진행해주세요.",
+    "survaystart": "분석 시작하기",
+    "submit": "설문 제출하기",
+    "submitload": "제출 중...",
+    "success":"설문이 성공적으로 제출되었습니다!",
+    "error":"제출 중 오류가 발생했습니다."
+  },
+  "VisualizationPage": {
+    "title": "감정 시각화",
+    "subtitle": "감정을 시각화한 미디어아트가 생성됩니다."
+  },
+  "footer": {
+    "menuname": "프로젝트",
+    "projectname": "프로젝트"
+  },
+  "NotFound": {
+    "title": "404 - 페이지를 찾을 수 없습니다",
+    "message": "요청하신 페이지가 존재하지 않습니다.",
+    "button": "홈으로 돌아가기"
+  },
+  "statsPage": {
+    "title": "설문 통계",
+    "subtitle": "설문 데이터를 분석하여 시각화합니다.",
+    "nodata":"표시할 데이터가 없습니다.",
+    "daily-hourly_heading":"날짜/시간대별 설문 제출 수",
+    "age_distribution_heading": "연령대별 설문 참여자 분포",
+    "total_surveys": "총 설문 참여자: {{count}}명",
+    "age_distribution_title": "설문 참여자 수",
+    "age_chart_title": "연령대별 분포",
+    "daily_count_heading": "날짜별 설문 제출 수",
+    "daily_count_title": "설문 참여자 수",
+    "hourly_count_heading": "시간대별 설문 제출 수",
+    "hourly_count_title": "설문 참여자 수",
+    "q1_heading": "사람들과 함께 있을 때 혼자라고 느낀 경험",
+    "q1_title": "응답 수",
+    "q2_heading": "사소한 순간이 좋게 느껴진 경험",
+    "q2_title": "응답 수",
+    "q3_heading": "최근에 소리지르고 싶었던 경험",
+    "q3_title": "응답 수",
+    "q4_heading": "최근에 멈칫했던 순간",
+    "q4_title": "응답 수",
+    "q5_heading": "괜히 조용해지고 싶은 날",
+    "q5_title": "응답 수",
+    "q6_heading": "최근에 시간이 빨리 가는 느낌",
+    "q6_title": "응답 수",
+    "q7_heading": "똑같은 일의 반복으로 인한 답답함",
+    "q7_title": "응답 수",
+    "q8_heading": "별일 아닌데 심장이 빨리 뛴 경험",
+    "q8_title": "응답 수",
+    "never": "전혀 없다",
+    "rarely": "거의 없다",
+    "sometimes": "가끔 있다",
+    "often": "자주 있다",
+    "always": "항상 그렇다"
+  }
+}
+```
+
+#### 3-2. public/locales/en/translation.json
+
+```json
+{
+  "menu": {
+    "home": "Home",
+    "analyze": "Analyze",
+    "visualization": "Visualization"
+  },
+  "home": {
+    "title": "Data Analysis & Visualization",
+    "subtitle": "Analyze data and check the results through our survey.",
+    "card_analyze_title": "Start Emotion Analysis",
+    "card_analyze_desc": "Go to the Analysis page and start emotion Analysis.",
+    "card_viz_title": "View Emotion Visualization",
+    "card_viz_desc": "Check the visualized results."
+  },
+  "AnalyzePage": {
+    "title": "Emotion Analysis",
+    "subtitle": "Please process the emotions for Emotion analysis.",
+    "survaystart": "Start analysis",
+    "submit": "Submit a survey",
+    "submitload": "Submitting...",
+    "success":"Survey submitted successfully!",
+    "error":"An error occurred during submission."
+  },
+  "VisualizationPage": {
+    "title": "Emotion Visualization",
+    "subtitle": "Media art that visualizes emotions is created."
+  },
+  "footer": {
+    "menuname": "Project",
+    "projectname": "Project"
+  },
+  "NotFound": {
+    "title": "404 - Page Not Found",
+    "message": "The requested page does not exist.",
+    "button": "Return to Home"
+  },
+  "statsPage": {
+    "title": "Survey statistics",
+    "subtitle": "Analyze and visualize survey data.",
+    "nodata":"There is no data to display.",
+    "daily-hourly_heading":"Number of survey submissions by date/time zone",
+    "age_distribution_heading": "Survey Participant Distribution by Age Group",
+    "total_surveys": "Total Survey Participants: {{count}}",
+    "age_distribution_title": "Responses",
+    "age_chart_title": "Distribution by Age Group",
+    "daily_count_heading": "Survey Submissions by Date",
+    "daily_count_title": "Responses",
+    "hourly_count_heading": "Survey Submissions by Hour",
+    "hourly_count_title": "Responses",
+    "q1_heading": "Feeling Alone When With People",
+    "q1_title": "Responses",
+    "q2_heading": "Finding Small Moments Pleasant",
+    "q2_title": "Responses",
+    "q3_heading": "Recent Urge to Scream",
+    "q3_title": "Responses",
+    "q4_heading": "Recent Moments of Hesitation",
+    "q4_title": "Responses",
+    "q5_heading": "Days Wanting to Be Quiet",
+    "q5_title": "Responses",
+    "q6_heading": "Recent Feeling of Time Passing Quickly",
+    "q6_title": "Responses",
+    "q7_heading": "Frustration from Repetitive Tasks",
+    "q7_title": "Responses",
+    "q8_heading": "Heart Racing for No Reason",
+    "q8_title": "Responses",
+    "never": "Never",
+    "rarely": "Rarely",
+    "sometimes": "Sometimes",
+    "often": "Often",
+    "always": "Always"
+  }
+}
+```
+
+### 4. 환경 설정 파일
+
+#### 4-1. .env.example
+
+```env
+# 백엔드 API 서버 주소
+VITE_API_BASE_URL=http://localhost:4000
+
+# API 인증을 위한 시크릿 키 (선택사항)
+VITE_API_SECRET_KEY=your_secret_key_here
+```
+
+---
+
+**색인(SaekIn) 프론트엔드** - 감정을 통한 예술적 경험을 제공하는 웹 애플리케이션 🎨
+
+> 이 README는 현재 코드베이스를 기반으로 작성되었으며, 개발자가 프로젝트를 이해하고 기여할 수 있도록 상세한 정보를 제공합니다. 모든 소스 코드가 포함되어 있어 README만 보고도 전체 프로젝트를 재현할 수 있습니다.

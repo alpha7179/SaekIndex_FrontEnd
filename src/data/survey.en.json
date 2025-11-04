@@ -116,7 +116,7 @@
     "label": "7. Have you ever felt frustrated by repetitive tasks?",
     "type": "radio",
     "options": [
-      { "value": 1, "label": 1 },
+      { "value": 1, "label": "Never" },
       { "value": 2, "label": "Rarely" },
       { "value": 3, "label": "Sometimes" },
       { "value": 4, "label": "Often" },
