@@ -117,14 +117,15 @@ const StatsPage = () => {
   const dailyCounts = stats.dailyCount || [];
   const hourlyCounts = stats.hourlyCount || [];
   const ageDistributions = stats.ageDistribution || [];
-  const q1Distributions = stats.question1Distribution || {};
-  const q2Distributions = stats.question2Distribution || {};
-  const q3Distributions = stats.question3Distribution || {};
-  const q4Distributions = stats.question4Distribution || {};
-  const q5Distributions = stats.question5Distribution || {};
-  const q6Distributions = stats.question6Distribution || {};
-  const q7Distributions = stats.question7Distribution || {};
-  const q8Distributions = stats.question8Distribution || {};
+  const questionDistributions = stats.questionDistributions || {};
+  const q1Distributions = questionDistributions.question1Distribution || {};
+  const q2Distributions = questionDistributions.question2Distribution || {};
+  const q3Distributions = questionDistributions.question3Distribution || {};
+  const q4Distributions = questionDistributions.question4Distribution || {};
+  const q5Distributions = questionDistributions.question5Distribution || {};
+  const q6Distributions = questionDistributions.question6Distribution || {};
+  const q7Distributions = questionDistributions.question7Distribution || {};
+  const q8Distributions = questionDistributions.question8Distribution || {};
   
   const heatmapData = stats.heatmapData || [];
 

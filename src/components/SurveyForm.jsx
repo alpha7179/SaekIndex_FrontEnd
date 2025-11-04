@@ -74,8 +74,13 @@ function SurveyForm() {
       
       // 설문 제출 후 isViewed 필드 자동 수정 (백그라운드에서 실행)
       try {
-        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4001';
-        await fetch(`${API_BASE_URL}/api/surveys/fix-isviewed`);
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+        await fetch(`${API_BASE_URL}/api/surveys/admin/fix-isviewed`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
         console.log('isViewed 필드 자동 수정 완료');
       } catch (error) {
         console.log('isViewed 필드 자동 수정 실패:', error);

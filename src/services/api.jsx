@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { getEnvVar } from '../utils/env';
 
-const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'http://localhost:4001');
+const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'http://localhost:4000');
 
 const api = axios.create({ 
   baseURL: API_BASE_URL,
@@ -44,17 +44,19 @@ export const surveyAPI = {
     return response.status;
   },
   
-  updateIsViewed: async (id) => {
-    const response = await api.get(API_ENDPOINTS.MARK_VIEWED(id));
-    return response.data;
-  },
-  
-  toggleIsViewed: async (id, currentIsViewed) => {
-    const response = await api.put(`${API_ENDPOINTS.SURVEYS}/${id}`, { 
-      isViewed: !currentIsViewed 
-    });
-    return response.data;
-  },
+    updateIsViewed: async (id, isViewed = true) => {
+      const response = await api.patch(`${API_ENDPOINTS.SURVEYS}/${id}/viewed`, { 
+        isViewed: isViewed 
+      });
+      return response.data;
+    },
+    
+    toggleIsViewed: async (id, currentIsViewed) => {
+        const response = await api.patch(`${API_ENDPOINTS.SURVEYS}/${id}/viewed`, { 
+            isViewed: !currentIsViewed 
+        });
+        return response.data;
+    },
   
   getSurveyStats: async () => {
     const response = await api.get(API_ENDPOINTS.SURVEYS_STATS);
