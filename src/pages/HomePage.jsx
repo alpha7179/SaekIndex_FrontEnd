@@ -1,30 +1,18 @@
 /* src/pages/HomePage.jsx */
-import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { FaPoll, FaChartBar } from 'react-icons/fa';
-import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../hooks/useLanguage';
 import GradientIcon from '../components/GradientIcon';
 import PageHeader from '../components/PageHeader';
+import { PageContainer, CardGrid } from '../components/common/Layout';
 
-const PageContainer = styled.div`
-  text-align: center;
-  padding: 3rem 1rem;
-`;
 
-const CardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-  max-width: 800px;
-  margin: 3rem auto 0;
-`;
 
 const Card = styled(Link)`
   background: white;
-  padding: 2rem;
-  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  border-radius: 25px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
   
@@ -39,11 +27,10 @@ const Card = styled(Link)`
 `;
 
 function HomePage() {
-    const { t } = useTranslation();
+    const { t } = useLanguage();
 
     return (
         <PageContainer>
-        {}
         <PageHeader 
             icon="😂"
             title={t('home.title')} 

@@ -1,7 +1,5 @@
 /* src/components/Footer.jsx */
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
+import { useLanguage } from '../hooks/useLanguage';
 import styled from '@emotion/styled';
 
 const FooterContainer = styled.footer`
@@ -69,8 +67,7 @@ const FooterLogo = styled.strong`
 `;
 
 function Footer() {
-    const location = useLocation();
-    const { t, i18n } = useTranslation();
+    const { t } = useLanguage();
 
     
     return (

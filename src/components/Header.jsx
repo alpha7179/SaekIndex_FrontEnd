@@ -1,8 +1,7 @@
 /* src/components/Header.jsx */
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../hooks/useLanguage';
 
 const HeaderContainer = styled.header`
   width: 100%;
@@ -78,11 +77,7 @@ const HeaderLogo = styled.strong`
 
 function Header() {
   const location = useLocation();
-  const { t, i18n } = useTranslation();
-
-  const changeLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-  };
+  const { t, changeLanguage, isCurrentLanguage, supportedLanguages } = useLanguage();
 
   const isActive = (path) => {
     return location.pathname === path ? 'active' : '';
@@ -93,7 +88,6 @@ function Header() {
       <Logo to="/"><HeaderLogo>색인</HeaderLogo></Logo>
 
       <Nav>
-        {}
         <NavLink to="/" className={isActive('/')}>
           {t('menu.home')}
         </NavLink>
@@ -106,12 +100,17 @@ function Header() {
       </Nav>
 
       <LangSwitcher>
-        {}
-        <LangButton active={i18n.language === 'ko'} onClick={() => changeLanguage('ko')}>
+        <LangButton 
+          active={isCurrentLanguage(supportedLanguages.KO)} 
+          onClick={() => changeLanguage(supportedLanguages.KO)}
+        >
           KOR
         </LangButton>
         <Separator />
-        <LangButton active={i18n.language === 'en'} onClick={() => changeLanguage('en')}>
+        <LangButton 
+          active={isCurrentLanguage(supportedLanguages.EN)} 
+          onClick={() => changeLanguage(supportedLanguages.EN)}
+        >
           ENG
         </LangButton>
       </LangSwitcher>

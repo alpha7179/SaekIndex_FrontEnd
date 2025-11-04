@@ -42,9 +42,9 @@ const PageContainer = styled.div`
 const Container = styled.div`
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 2.5rem;
   background: white;
-  border-radius: 12px;
+  border-radius: 25px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 `;
 
@@ -66,7 +66,7 @@ const Grid = styled.div`
 
 const TopActions = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-bottom: 1.5rem;
 
   max-width: 900px;
@@ -74,13 +74,20 @@ const TopActions = styled.div`
   padding: 0 0rem;
 `;
 const StatsButton = styled(Link)`
-  padding: 0.5rem 1rem;
-  background: #667eea;
-  color: white;
-  border-radius: 6px;
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
   font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #b84182ff 0%, #ddc9bfff 100%);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  text-decoration: none;
+  display: inline-block;
+
   &:hover {
-    background: #5a67d8;
+    transform: scale(1.05);
   }
 `;
 
@@ -94,15 +101,15 @@ const StatsPage = () => {
   });
 
   if (isLoading) {
-    return <p>통계 데이터를 불러오는 중입니다...</p>;
+    return <p>{t('statsPage.loading')}</p>;
   }
 
   if (error) {
-    return <p>데이터를 불러오는 데 실패했습니다: {error.message}</p>;
+    return <p>{t('statsPage.error', { message: error.message })}</p>;
   }
 
   if (!data || !data.data || !data.data.totalSurveys) {
-    return <p>표시할 데이터가 없습니다. 설문조사 데이터를 추가해주세요.</p>;
+    return <p>{t('statsPage.no_data')}</p>;
   }
 
   const stats = data.data;
@@ -181,11 +188,11 @@ const StatsPage = () => {
     return {
       labels: labels.map(label => {
         const labelMap = {
-          1: '전혀 없다',
-          2: '거의 없다', 
-          3: '가끔 있다',
-          4: '자주 있다',
-          5: '항상 그렇다'
+          1: t('statsPage.never'),
+          2: t('statsPage.rarely'), 
+          3: t('statsPage.sometimes'),
+          4: t('statsPage.often'),
+          5: t('statsPage.always')
         };
         return labelMap[label];
       }),
@@ -226,7 +233,7 @@ const StatsPage = () => {
         subtitle={t('statsPage.subtitle')}
       />
       <TopActions>
-        <StatsButton to="/admin">관리자 페이지로 돌아가기</StatsButton>
+        <StatsButton to="/admin">{t('statsPage.back_to_admin')}</StatsButton>
       </TopActions>
       <Container>
         <ChartTitle>{t('statsPage.total_surveys', { count: stats.totalSurveys })}</ChartTitle>
@@ -262,7 +269,7 @@ const StatsPage = () => {
           <p>{t('statsPage.nodata')}</p>
         )}
         <hr />
-        <ChartTitle>심리 평가 질문 응답 분포</ChartTitle>
+        <ChartTitle>{t('statsPage.psychological_questions_title')}</ChartTitle>
         <Grid>
           <div>
             <ChartTitle>{t('statsPage.q1_heading')}</ChartTitle>

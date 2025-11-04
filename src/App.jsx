@@ -1,5 +1,4 @@
 /* src/App.jsx */
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
@@ -17,15 +16,17 @@ import StatsPage from './pages/StatsPage';
 import Header from './components/Header';
 import Footer from './components/Footer'; 
 import NotFound from './components/NotFound';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Styles
 import GlobalStyles from './styles/GlobalStyles';
+import { DEFAULT_CONFIG } from './constants';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,
-      retry: 1,
+      staleTime: DEFAULT_CONFIG.QUERY.STALE_TIME,
+      retry: DEFAULT_CONFIG.QUERY.RETRY,
     },
   },
 });
@@ -38,20 +39,22 @@ function App() {
         <div className="app">
           <Header />
           <main className="main-content">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/analyze" element={<AnalyzePage />} />
-              <Route path="/visualization" element={<VisualizationPage />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/admin/stats" element={<StatsPage />} /> 
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/analyze" element={<AnalyzePage />} />
+                <Route path="/visualization" element={<VisualizationPage />} />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/admin/stats" element={<StatsPage />} /> 
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </ErrorBoundary>
           </main>
           <Footer />
         </div>
         <ToastContainer
-          position="bottom-right"
-          autoClose={3000}
+          position={DEFAULT_CONFIG.TOAST.POSITION}
+          autoClose={DEFAULT_CONFIG.TOAST.AUTO_CLOSE}
           theme="light"
         />
       </BrowserRouter>
