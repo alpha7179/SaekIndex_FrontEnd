@@ -26,7 +26,7 @@ const surveys = {
   en: surveyEN,
 };
 
-function SurveyForm() {
+function SurveyForm({ onSurveyComplete, sessionId }) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const today = new Date().toISOString().split('T')[0];
@@ -65,10 +65,24 @@ function SurveyForm() {
       
       if (missingFields.length > 0) {
         toast.error(`필수 항목이 누락되었습니다: ${missingFields.join(', ')}`);
+        setIsSubmitting(false);
         return;
       }
       
       console.log("Processed data before sending:", processedData);
+      
+      // onSurveyComplete prop이 있으면 (AnalyzePage에서 사용) 그것을 호출
+      // 없으면 직접 설문 제출 (독립적인 SurveyForm 사용)
+      if (onSurveyComplete) {
+        console.log("📋 SurveyForm: onSurveyComplete 호출 (감정 데이터 포함 저장)");
+        await onSurveyComplete(processedData);
+        // onSurveyComplete가 성공하면 여기서 끝 (toast 등은 handleSurveyComplete에서 처리)
+        reset();
+        return;
+      }
+      
+      // 독립적인 설문 제출 (감정 데이터 없음)
+      console.log("📋 SurveyForm: 직접 설문 제출 (감정 데이터 없음)");
       const result = await surveyAPI.createSurvey(processedData);
       console.log("Server response:", result);
       

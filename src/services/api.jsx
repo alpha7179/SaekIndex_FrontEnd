@@ -6,7 +6,7 @@ const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'http://localhost:4000');
 
 const api = axios.create({ 
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 10000, // 기본 타임아웃 10초 (Python 서버 방식으로 빠름)
   headers: {
     'Content-Type': 'application/json',
   },
@@ -61,5 +61,86 @@ export const surveyAPI = {
   getSurveyStats: async () => {
     const response = await api.get(API_ENDPOINTS.SURVEYS_STATS);
     return response.data;
+  },
+};
+
+// Emotion API
+export const emotionAPI = {
+  /**
+   * 세션 시작 (녹화 시작)
+   * @returns {Promise<{sessionId: string, status: string}>}
+   */
+  startSession: async () => {
+    const response = await api.post('/api/emotion/start-session');
+    return response.data;
+  },
+
+  /**
+   * 웹캠 감정 벡터 전송
+   * @param {string} sessionId - 세션 ID
+   * @param {number[]} webcamVector - 웹캠 감정 벡터 [anger, sad, neutral, happy, surprise]
+   * @returns {Promise<{status: string}>}
+   */
+  pushWebcamVector: async (sessionId, webcamVector) => {
+    const response = await api.post('/api/emotion/push-webcam', {
+      sessionId,
+      webcamVector
+    });
+    return response.data;
+  },
+
+  /**
+   * 설문 데이터와 웹캠 데이터 융합
+   * @param {string} sessionId - 세션 ID
+   * @param {Object} surveyData - 설문 응답 데이터
+   * @returns {Promise<{status: string, frameCount: number, surveyVector: number[], sessionData: Array}>}
+   */
+  fuseEmotionData: async (sessionId, surveyData) => {
+    const response = await api.post('/api/emotion/fuse', {
+      sessionId,
+      surveyData
+    });
+    return response.data;
+  },
+
+  /**
+   * 이미지 파일을 받아서 감정 분석 수행
+   * @param {File} imageFile - 이미지 파일
+   * @returns {Promise<{label: string, score: number, probs: number[], timestamp: string}>}
+   */
+  analyzeEmotionImage: async (imageFile) => {
+    const form = new FormData();
+    form.append('image', imageFile);
+    
+    // 타임아웃 설정 (10초 - Python 서버 방식으로 빠름)
+    const timeout = 10000;
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+      const response = await api.post('/api/emotion/analyze', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        signal: controller.signal,
+        timeout: timeout
+      });
+      clearTimeout(timeoutId);
+      return response.data;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      
+      // Network Error 처리
+      if (error.code === 'ERR_NETWORK' || error.message === 'Network Error') {
+        console.error('[API] Network Error 발생:', error);
+        throw new Error('네트워크 오류가 발생했습니다. 서버 연결을 확인해주세요.');
+      }
+      
+      // 타임아웃 처리
+      if (error.code === 'ECONNABORTED' || error.message === 'canceled' || error.message.includes('시간이 초과')) {
+        throw new Error('요청 시간이 초과되었습니다. (10초)');
+      }
+      
+      throw error;
+    }
   },
 };
