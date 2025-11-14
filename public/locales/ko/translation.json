@@ -24,6 +24,9 @@
   "VisualizationPage": {
     "title": "감정 시각화",
     "subtitle": "감정을 시각화한 미디어아트가 생성됩니다.",
+    "redirect_subtitle": "미디어아트 전시실로 이동해주세요",
+    "redirect_message": "미디어아트 전시실로 이동해주세요",
+    "redirect_countdown": "{{seconds}}초 후 메인 페이지로 이동합니다...",
     "start_button": "시각화 시작하기",
     "data_title": "감정 분석 대기열",
     "loading": "데이터를 불러오는 중...",
@@ -59,6 +62,7 @@
     "queue_empty": "감정 분석 대기 중인 설문이 없습니다.",
     "analysis_completed": "감정 분석이 완료되었습니다!",
     "analysis_failed": "감상여부 업데이트에 실패했습니다.",
+    "activation_failed": "활성 큐 상태 업데이트에 실패했습니다.",
     "visualization_demo": "감정 시각화 기능이 실행됩니다."
   },
   "footer": {
@@ -149,6 +153,18 @@
     "change_to_incomplete": "미완료로 변경",
     "change_to_complete": "완료로 변경",
     "viewed_status_changed": "감상여부가 변경되었습니다!",
-    "viewed_status_change_failed": "감상여부 변경에 실패했습니다."
+    "viewed_status_change_failed": "감상여부 변경에 실패했습니다.",
+    "is_active_queue": "활성 큐 상태",
+    "active": "활성화",
+    "inactive": "비활성화",
+    "change_to_active": "활성화로 변경",
+    "change_to_inactive": "비활성화로 변경",
+    "active_queue_status_changed": "활성 큐 상태가 변경되었습니다!",
+    "active_queue_status_change_failed": "활성 큐 상태 변경에 실패했습니다.",
+    "emotion_analysis_results": "감정 분석 결과",
+    "survey_emotion": "설문 기반 감정",
+    "expression_emotion": "표정 기반 감정",
+    "total_emotion": "최종 융합 감정",
+    "no_emotion_data": "감정 분석 데이터가 없습니다."
   }
 }

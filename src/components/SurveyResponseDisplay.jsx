@@ -127,6 +127,75 @@ const ViewedStatusContainer = styled.div`
   gap: 0.5rem;
 `;
 
+const EmotionSection = styled.div`
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 25px;
+  border: 2px solid #dee2e6;
+`;
+
+const EmotionTitle = styled.h4`
+  margin: 0 0 1rem 0;
+  color: #495057;
+  font-size: 1.1rem;
+  font-weight: 600;
+`;
+
+const EmotionGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+`;
+
+const EmotionCard = styled.div`
+  background: white;
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const EmotionLabel = styled.div`
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+`;
+
+const EmotionValue = styled.div`
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #b84182;
+  text-transform: capitalize;
+`;
+
+const EmotionBadge = styled.span`
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: ${props => {
+    switch(props.emotion?.toLowerCase()) {
+      case 'angry': return '#ff6b6b';
+      case 'sad': return '#4dabf7';
+      case 'neutral': return '#868e96';
+      case 'happy': return '#51cf66';
+      case 'surprise': return '#ffd43b';
+      default: return '#adb5bd';
+    }
+  }};
+  color: white;
+`;
+
+const NoEmotionData = styled.div`
+  text-align: center;
+  color: #868e96;
+  padding: 1rem;
+  font-style: italic;
+`;
+
 const surveys = {
   ko: surveyKO,
   en: surveyEN,
@@ -138,13 +207,15 @@ function SurveyResponseDisplay({ selectedSurvey }) {
   
   // 로컬 상태로 현재 isViewed 값 추적 (연속 클릭 문제 해결)
   const [localIsViewed, setLocalIsViewed] = useState(selectedSurvey?.isViewed || false);
+  const [localIsActiveQueue, setLocalIsActiveQueue] = useState(selectedSurvey?.isActiveQueue || false);
   
   // selectedSurvey가 변경될 때마다 로컬 상태 동기화
   useEffect(() => {
     if (selectedSurvey) {
       setLocalIsViewed(selectedSurvey.isViewed);
+      setLocalIsActiveQueue(selectedSurvey.isActiveQueue);
     }
-  }, [selectedSurvey?.isViewed, selectedSurvey?._id]);
+  }, [selectedSurvey?.isViewed, selectedSurvey?.isActiveQueue, selectedSurvey?._id]);
 
   const toggleViewedMutation = useMutation({
     mutationFn: ({ id, currentIsViewed }) => surveyAPI.toggleIsViewed(id, currentIsViewed),
@@ -195,6 +266,55 @@ function SurveyResponseDisplay({ selectedSurvey }) {
     }
   });
 
+  const toggleActiveQueueMutation = useMutation({
+    mutationFn: ({ id, currentIsActiveQueue }) => surveyAPI.updateIsActiveQueue(id, !currentIsActiveQueue),
+    onMutate: async ({ id, currentIsActiveQueue }) => {
+      // Optimistic Update: 즉시 UI 업데이트
+      await queryClient.cancelQueries({ queryKey: ['surveys'] });
+      
+      const previousData = queryClient.getQueriesData({ queryKey: ['surveys'] });
+      
+      // 모든 surveys 쿼리 데이터 업데이트
+      queryClient.setQueriesData({ queryKey: ['surveys'] }, (old) => {
+        if (!old?.data?.surveys) return old;
+        
+        return {
+          ...old,
+          data: {
+            ...old.data,
+            surveys: old.data.surveys.map(survey => 
+              survey._id === id 
+                ? { ...survey, isActiveQueue: !currentIsActiveQueue }
+                : survey
+            )
+          }
+        };
+      });
+      
+      return { previousData };
+    },
+    onSuccess: () => {
+      toast.success(t('surveyResponse.active_queue_status_changed'));
+    },
+    onError: (error, variables, context) => {
+      // 실패 시 로컬 상태도 롤백
+      setLocalIsActiveQueue(variables.currentIsActiveQueue);
+      
+      // 실패 시 이전 데이터로 롤백
+      if (context?.previousData) {
+        context.previousData.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+      toast.error(t('surveyResponse.active_queue_status_change_failed'));
+      console.error('Toggle active queue error:', error);
+    },
+    onSettled: () => {
+      // 최종적으로 서버 데이터와 동기화
+      queryClient.invalidateQueries({ queryKey: ['surveys'] });
+    }
+  });
+
   const handleToggleViewed = () => {
     if (selectedSurvey?._id && !toggleViewedMutation.isPending) {
       // 로컬 상태를 즉시 업데이트 (연속 클릭 문제 해결)
@@ -204,6 +324,19 @@ function SurveyResponseDisplay({ selectedSurvey }) {
       toggleViewedMutation.mutate({ 
         id: selectedSurvey._id, 
         currentIsViewed: localIsViewed 
+      });
+    }
+  };
+
+  const handleToggleActiveQueue = () => {
+    if (selectedSurvey?._id && !toggleActiveQueueMutation.isPending) {
+      // 로컬 상태를 즉시 업데이트 (연속 클릭 문제 해결)
+      const newIsActiveQueue = !localIsActiveQueue;
+      setLocalIsActiveQueue(newIsActiveQueue);
+      
+      toggleActiveQueueMutation.mutate({ 
+        id: selectedSurvey._id, 
+        currentIsActiveQueue: localIsActiveQueue 
       });
     }
   };
@@ -269,7 +402,75 @@ function SurveyResponseDisplay({ selectedSurvey }) {
             </ViewedStatusContainer>
           </InfoValue>
         </InfoItem>
+        <InfoItem>
+          <InfoLabel>{t('surveyResponse.is_active_queue')}</InfoLabel>
+          <InfoValue>
+            <ViewedStatusContainer>
+              <StatusBadge isViewed={localIsActiveQueue}>
+                {localIsActiveQueue ? t('surveyResponse.active') : t('surveyResponse.inactive')}
+              </StatusBadge>
+              <ToggleButton 
+                onClick={handleToggleActiveQueue}
+                disabled={toggleActiveQueueMutation.isPending}
+              >
+                {toggleActiveQueueMutation.isPending 
+                  ? t('surveyResponse.changing')
+                  : localIsActiveQueue 
+                    ? t('surveyResponse.change_to_inactive')
+                    : t('surveyResponse.change_to_active')
+                }
+              </ToggleButton>
+            </ViewedStatusContainer>
+          </InfoValue>
+        </InfoItem>
       </BasicInfo>
+
+      {/* 감정 분석 결과 섹션 */}
+      {(selectedSurvey.survey || selectedSurvey.expression || selectedSurvey.total) && (
+        <EmotionSection>
+          <EmotionTitle>{t('surveyResponse.emotion_analysis_results')}</EmotionTitle>
+          <EmotionGrid>
+            {selectedSurvey.survey?.surveyDominantEmotion && (
+              <EmotionCard>
+                <EmotionLabel>{t('surveyResponse.survey_emotion')}</EmotionLabel>
+                <EmotionValue>
+                  <EmotionBadge emotion={selectedSurvey.survey.surveyDominantEmotion}>
+                    {selectedSurvey.survey.surveyDominantEmotion}
+                  </EmotionBadge>
+                </EmotionValue>
+              </EmotionCard>
+            )}
+            
+            {selectedSurvey.expression?.expressionDominantEmotion && (
+              <EmotionCard>
+                <EmotionLabel>{t('surveyResponse.expression_emotion')}</EmotionLabel>
+                <EmotionValue>
+                  <EmotionBadge emotion={selectedSurvey.expression.expressionDominantEmotion}>
+                    {selectedSurvey.expression.expressionDominantEmotion}
+                  </EmotionBadge>
+                </EmotionValue>
+              </EmotionCard>
+            )}
+            
+            {selectedSurvey.total?.dominantEmotion && (
+              <EmotionCard>
+                <EmotionLabel>{t('surveyResponse.total_emotion')}</EmotionLabel>
+                <EmotionValue>
+                  <EmotionBadge emotion={selectedSurvey.total.dominantEmotion}>
+                    {selectedSurvey.total.dominantEmotion}
+                  </EmotionBadge>
+                </EmotionValue>
+              </EmotionCard>
+            )}
+          </EmotionGrid>
+          
+          {!selectedSurvey.survey?.surveyDominantEmotion && 
+           !selectedSurvey.expression?.expressionDominantEmotion && 
+           !selectedSurvey.total?.dominantEmotion && (
+            <NoEmotionData>{t('surveyResponse.no_emotion_data')}</NoEmotionData>
+          )}
+        </EmotionSection>
+      )}
 
       {questionFields.map((field) => {
         const responseValue = selectedSurvey[field.name];

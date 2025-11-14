@@ -24,6 +24,9 @@
   "VisualizationPage": {
     "title": "Emotion Visualization",
     "subtitle": "Media art that visualizes emotions is created.",
+    "redirect_subtitle": "Please proceed to the Media Art Exhibition Room",
+    "redirect_message": "Please proceed to the Media Art Exhibition Room",
+    "redirect_countdown": "Redirecting to main page in {{seconds}} seconds...",
     "start_button": "Start Visualization",
     "data_title": "Emotion Analysis Queue",
     "loading": "Loading data...",
@@ -59,6 +62,7 @@
     "queue_empty": "No surveys waiting for emotion analysis.",
     "analysis_completed": "Emotion analysis completed!",
     "analysis_failed": "Failed to update viewing status.",
+    "activation_failed": "Failed to update active queue status.",
     "visualization_demo": "Emotion visualization feature is running."
   },
   "footer": {
@@ -149,6 +153,18 @@
     "change_to_incomplete": "Change to Incomplete",
     "change_to_complete": "Change to Complete",
     "viewed_status_changed": "Viewing status has been changed!",
-    "viewed_status_change_failed": "Failed to change viewing status."
+    "viewed_status_change_failed": "Failed to change viewing status.",
+    "is_active_queue": "Active Queue Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "change_to_active": "Change to Active",
+    "change_to_inactive": "Change to Inactive",
+    "active_queue_status_changed": "Active queue status has been changed!",
+    "active_queue_status_change_failed": "Failed to change active queue status.",
+    "emotion_analysis_results": "Emotion Analysis Results",
+    "survey_emotion": "Survey-based Emotion",
+    "expression_emotion": "Expression-based Emotion",
+    "total_emotion": "Final Fused Emotion",
+    "no_emotion_data": "No emotion analysis data available."
   }
 }

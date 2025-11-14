@@ -1,5 +1,6 @@
 /* src/pages/VisualizationPage.jsx */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -164,18 +165,62 @@ const ButtonContainer = styled.div`
   margin: 1rem 0;
 `;
 
+const RedirectMessage = styled.div`
+  background: linear-gradient(135deg, #b84182ff 0%, #ddc9bfff 100%);
+  color: white;
+  padding: 3rem 2rem;
+  border-radius: 25px;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(184, 65, 130, 0.3);
+  animation: fadeIn 0.5s ease-in;
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+const CountdownText = styled.div`
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  opacity: 0.9;
+`;
+
 
 
 function VisualizationPage() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [isVisualizationStarted, setIsVisualizationStarted] = useState(false);
     const [selectedSurvey, setSelectedSurvey] = useState(null);
+    const [showRedirectMessage, setShowRedirectMessage] = useState(false);
+    const [countdown, setCountdown] = useState(5);
 
     const { data, isLoading, error } = useQuery({
         queryKey: ['surveys'],
         queryFn: () => surveyAPI.getSurveys(1),
         enabled: isVisualizationStarted, // 시각화가 시작된 후에만 데이터 로드
+    });
+
+    const updateIsActiveQueueMutation = useMutation({
+        mutationFn: (id) => surveyAPI.updateIsActiveQueue(id, true),
+        onSuccess: () => {
+            console.log('Active queue status updated successfully');
+        },
+        onError: (error) => {
+            console.error('Failed to update active queue status:', error);
+            toast.error(t('VisualizationPage.activation_failed'));
+        }
     });
 
     const updateIsViewedMutation = useMutation({
@@ -230,20 +275,43 @@ function VisualizationPage() {
         setSelectedSurvey(survey);
     };
 
-    const handleViewEmotion = () => {
+    const handleViewEmotion = async () => {
         if (selectedSurvey) {
-            // 선택된 설문을 닫기 (대기열에서 제거됨)
-            setSelectedSurvey(null);
-            
-            // 백엔드에서 isViewed를 true로 업데이트
-            updateIsViewedMutation.mutate(selectedSurvey._id);
-            
-            // 성공 메시지 표시
-            toast.success(t('VisualizationPage.analysis_completed'));
+            try {
+                // 1. isActiveQueue를 true로 업데이트 (나의 감정 보기 활성화)
+                await updateIsActiveQueueMutation.mutateAsync(selectedSurvey._id);
+                console.log('✅ isActiveQueue 활성화 완료:', selectedSurvey._id);
+                
+                // 2. 시각화 완료 후 isViewed를 true로 업데이트 (대기열에서 제거)
+                updateIsViewedMutation.mutate(selectedSurvey._id);
+                
+                // 3. 선택된 설문 초기화
+                setSelectedSurvey(null);
+                
+                // 4. 리다이렉트 메시지 표시
+                setShowRedirectMessage(true);
+                setCountdown(5);
+                
+                // 5. 성공 메시지 표시
+                toast.success(t('VisualizationPage.analysis_completed'));
+            } catch (error) {
+                console.error('❌ 감정 보기 처리 실패:', error);
+                toast.error(t('VisualizationPage.analysis_failed'));
+            }
         }
-        // 감정 시각화 로직을 여기에 추가할 수 있습니다
-        alert(t('VisualizationPage.visualization_demo'));
     };
+
+    // 카운트다운 및 리다이렉트 처리
+    useEffect(() => {
+        if (showRedirectMessage && countdown > 0) {
+            const timer = setTimeout(() => {
+                setCountdown(countdown - 1);
+            }, 1000);
+            return () => clearTimeout(timer);
+        } else if (showRedirectMessage && countdown === 0) {
+            navigate('/');
+        }
+    }, [showRedirectMessage, countdown, navigate]);
 
 
 
@@ -262,9 +330,16 @@ function VisualizationPage() {
             <PageHeader
                 icon="📊"
                 title={t('VisualizationPage.title')} 
-                subtitle={t('VisualizationPage.subtitle')}
+                subtitle={showRedirectMessage ? t('VisualizationPage.redirect_subtitle') : t('VisualizationPage.subtitle')}
             />
-            {isVisualizationStarted ? (
+            {showRedirectMessage ? (
+                <RedirectMessage>
+                    {t('VisualizationPage.redirect_message')}
+                    <CountdownText>
+                        {t('VisualizationPage.redirect_countdown', { seconds: countdown })}
+                    </CountdownText>
+                </RedirectMessage>
+            ) : isVisualizationStarted ? (
                 <VisualizationContainer>
                     <VisualizationTitle>{t('VisualizationPage.queue_title')}</VisualizationTitle>
                     

@@ -58,6 +58,13 @@ export const surveyAPI = {
         });
         return response.data;
     },
+    
+    updateIsActiveQueue: async (id, isActiveQueue = true) => {
+      const response = await api.patch(`${API_ENDPOINTS.SURVEYS}/${id}/active-queue`, { 
+        isActiveQueue: isActiveQueue 
+      });
+      return response.data;
+    },
   
   getSurveyStats: async () => {
     const response = await api.get(API_ENDPOINTS.SURVEYS_STATS);

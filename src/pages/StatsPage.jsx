@@ -1,5 +1,4 @@
 // src/pages/StatsPage.jsx
-import React from 'react';
 import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -38,40 +37,118 @@ ChartJS.register(
 
 const PageContainer = styled.div`
   padding: 3rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
 `;
+
 const Container = styled.div`
-  max-width: 900px;
+  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem 2.5rem;
+  padding: 2rem;
   background: white;
   border-radius: 25px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  overflow-x: hidden;
+  
+  @media (max-width: 1024px) {
+    max-width: 95%;
+    padding: 1.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 1rem;
+    border-radius: 15px;
+    margin: 0 0.5rem;
+    width: calc(100% - 1rem);
+  }
 `;
 
 const ChartTitle = styled.h3`
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`;
+
+const ChartWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 300px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  
+  > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  canvas {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  @media (max-width: 768px) {
+    min-height: 250px;
+  }
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   margin-top: 2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  
+  @media (max-width: 1024px) {
+    gap: 1.5rem;
+  }
+  
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  > * {
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
   }
 `;
 
 const TopActions = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 1.5rem;
-
-  max-width: 900px;
   margin: 0 auto 1.5rem auto;
-  padding: 0 0rem;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  
+  @media (max-width: 768px) {
+    padding: 0 0.5rem;
+  }
 `;
 const StatsButton = styled(Link)`
   padding: 1rem 2.5rem;
@@ -88,6 +165,34 @@ const StatsButton = styled(Link)`
 
   &:hover {
     transform: scale(1.05);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+  }
+`;
+
+const Divider = styled.hr`
+  margin: 3rem 0;
+  border: none;
+  border-top: 2px solid #f0f0f0;
+  
+  @media (max-width: 768px) {
+    margin: 2rem 0;
+  }
+`;
+
+const SingleChartWrapper = styled(ChartWrapper)`
+  min-height: 400px;
+  
+  @media (max-width: 768px) {
+    min-height: 300px;
   }
 `;
 
@@ -216,13 +321,89 @@ const StatsPage = () => {
   const q7ChartData = formatPieChartData(q7Distributions, 'q7');
   const q8ChartData = formatPieChartData(q8Distributions, 'q8');
 
-  const options = {
+  const getAspectRatio = () => {
+    const width = window.innerWidth;
+    if (width < 768) return 1.5;
+    if (width < 1024) return 1.8;
+    return 2.2;
+  };
+
+  const chartOptions = {
     responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: getAspectRatio(),
     plugins: {
-      legend: { position: 'top' },
+      legend: { 
+        position: 'top',
+        labels: {
+          boxWidth: 12,
+          padding: 10,
+          font: {
+            size: window.innerWidth < 768 ? 10 : 12
+          }
+        }
+      },
     },
     scales: {
-      y: { beginAtZero: true }
+      y: { 
+        beginAtZero: true,
+        ticks: {
+          font: {
+            size: window.innerWidth < 768 ? 10 : 12
+          },
+          maxTicksLimit: window.innerWidth < 768 ? 5 : 10
+        }
+      },
+      x: {
+        ticks: {
+          font: {
+            size: window.innerWidth < 768 ? 10 : 12
+          },
+          maxRotation: window.innerWidth < 768 ? 45 : 0,
+          minRotation: window.innerWidth < 768 ? 45 : 0
+        }
+      }
+    },
+    layout: {
+      padding: {
+        left: 10,
+        right: 10,
+        top: 10,
+        bottom: 10
+      }
+    }
+  };
+
+  const getPieAspectRatio = () => {
+    const width = window.innerWidth;
+    if (width < 768) return 1.2;
+    if (width < 1024) return 1.1;
+    return 1.3;
+  };
+
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: getPieAspectRatio(),
+    plugins: {
+      legend: {
+        position: window.innerWidth < 768 ? 'bottom' : 'right',
+        labels: {
+          boxWidth: 12,
+          padding: 8,
+          font: {
+            size: window.innerWidth < 768 ? 10 : 12
+          }
+        }
+      },
+    },
+    layout: {
+      padding: {
+        left: 5,
+        right: 5,
+        top: 5,
+        bottom: 5
+      }
     }
   };
 
@@ -238,104 +419,114 @@ const StatsPage = () => {
       </TopActions>
       <Container>
         <ChartTitle>{t('statsPage.total_surveys', { count: stats.totalSurveys })}</ChartTitle>
+        
         <ChartTitle>{t('statsPage.daily-hourly_heading')}</ChartTitle>
-        {heatmapData.length > 0 ? (
-          <HeatmapChart data={heatmapData} />
-        ) : (
-          <p>{t('statsPage.nodata')}</p>
-        )}
+        <SingleChartWrapper>
+          {heatmapData.length > 0 ? (
+            <HeatmapChart data={heatmapData} />
+          ) : (
+            <p>{t('statsPage.nodata')}</p>
+          )}
+        </SingleChartWrapper>
+        
         <Grid>
-          <div>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.daily_count_heading')}</ChartTitle>
             {dailyCounts.length > 0 ? (
-              <Line data={dailyChartData} />
+              <Line data={dailyChartData} options={chartOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
-          <div>
+          </ChartWrapper>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.hourly_count_heading')}</ChartTitle>
             {hourlyCounts.length > 0 ? (
-              <Line data={hourlyChartData} />
+              <Line data={hourlyChartData} options={chartOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
+          </ChartWrapper>
         </Grid>
-        <hr />
+        
+        <Divider />
+        
         <ChartTitle>{t('statsPage.age_distribution_heading')}</ChartTitle>
-        {ageDistributions.length > 0 ? (
-          <Bar data={ageChartData} />
-        ) : (
-          <p>{t('statsPage.nodata')}</p>
-        )}
-        <hr />
+        <SingleChartWrapper>
+          {ageDistributions.length > 0 ? (
+            <Bar data={ageChartData} options={chartOptions} />
+          ) : (
+            <p>{t('statsPage.nodata')}</p>
+          )}
+        </SingleChartWrapper>
+        
+        <Divider />
+        
         <ChartTitle>{t('statsPage.psychological_questions_title')}</ChartTitle>
         <Grid>
-          <div>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.q1_heading')}</ChartTitle>
             {Object.keys(q1Distributions).length > 0 ? (
-              <Pie data={q1ChartData} />
+              <Pie data={q1ChartData} options={pieOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
-          <div>
+          </ChartWrapper>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.q2_heading')}</ChartTitle>
             {Object.keys(q2Distributions).length > 0 ? (
-              <Pie data={q2ChartData} />
+              <Pie data={q2ChartData} options={pieOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
-          <div>
+          </ChartWrapper>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.q3_heading')}</ChartTitle>
             {Object.keys(q3Distributions).length > 0 ? (
-              <Pie data={q3ChartData} />
+              <Pie data={q3ChartData} options={pieOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
-          <div>
+          </ChartWrapper>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.q4_heading')}</ChartTitle>
             {Object.keys(q4Distributions).length > 0 ? (
-              <Pie data={q4ChartData} />
+              <Pie data={q4ChartData} options={pieOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
-          <div>
+          </ChartWrapper>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.q5_heading')}</ChartTitle>
             {Object.keys(q5Distributions).length > 0 ? (
-              <Pie data={q5ChartData} />
+              <Pie data={q5ChartData} options={pieOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
-          <div>
+          </ChartWrapper>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.q6_heading')}</ChartTitle>
             {Object.keys(q6Distributions).length > 0 ? (
-              <Pie data={q6ChartData} />
+              <Pie data={q6ChartData} options={pieOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
-          <div>
+          </ChartWrapper>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.q7_heading')}</ChartTitle>
             {Object.keys(q7Distributions).length > 0 ? (
-              <Pie data={q7ChartData} />
+              <Pie data={q7ChartData} options={pieOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
-          <div>
+          </ChartWrapper>
+          <ChartWrapper>
             <ChartTitle>{t('statsPage.q8_heading')}</ChartTitle>
             {Object.keys(q8Distributions).length > 0 ? (
-              <Pie data={q8ChartData} />
+              <Pie data={q8ChartData} options={pieOptions} />
             ) : (
               <p>{t('statsPage.nodata')}</p>
             )}
-          </div>
+          </ChartWrapper>
         </Grid>
       </Container>
     </PageContainer>
