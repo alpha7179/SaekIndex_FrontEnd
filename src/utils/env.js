@@ -6,11 +6,15 @@
 export const getEnvVar = (key, defaultValue = '') => {
   const value = import.meta.env[key];
   
-  if (!value && !defaultValue) {
-    console.warn(`Environment variable ${key} is not defined`);
+  // 빈 문자열도 유효한 값으로 처리 (프록시 사용 시)
+  if (value === undefined || value === null) {
+    if (!defaultValue && defaultValue !== '') {
+      console.warn(`Environment variable ${key} is not defined`);
+    }
+    return defaultValue;
   }
   
-  return value || defaultValue;
+  return value;
 };
 
 /**

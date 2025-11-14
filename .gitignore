@@ -22,6 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-*.env
-/.env
+# Environment variables
+# 로컬 전용 파일만 제외
+.env
+.env.local
+.env.*.local
+
+# 환경별 설정 파일은 Git에 포함 (민감한 정보 없음)
+# .env.development  ✅ 커밋됨
+# .env.production   ✅ 커밋됨
+# .env.example      ✅ 커밋됨
+
 /secret.txt

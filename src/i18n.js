@@ -15,6 +15,19 @@ i18n
     },
     
     debug: false,
+    
+    react: {
+      useSuspense: false,
+    },
+    
+    initImmediate: true,
+    
+    requestOptions: {
+      cache: 'no-cache',
+    },
+    
+    missingKeyHandler: false,
+    parseMissingKeyHandler: (key) => key,
 
     interpolation: {
       escapeValue: false,
