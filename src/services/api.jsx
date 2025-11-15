@@ -7,7 +7,7 @@ const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', '');
 
 const api = axios.create({ 
   baseURL: API_BASE_URL,
-  timeout: 10000, // 기본 타임아웃 10초 (Python 서버 방식으로 빠름)
+  timeout: 30000, // 타임아웃 30초로 증가
   headers: {
     'Content-Type': 'application/json',
   },

@@ -5,41 +5,31 @@ import styled from '@emotion/styled';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { surveyAPI } from '../services/api';
-import PageHeader from '../components/PageHeader';
+import HeroSection from '../components/HeroSection';
 import { toast } from 'react-toastify';
+import { FaArrowRight } from 'react-icons/fa';
 
 const PageContainer = styled.div`
-  text-align: center;
-  padding: 3rem;
-`;
-
-const StartButton = styled.button`
-  padding: 1rem 2.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(135deg, #b84182ff 0%, #ddc9bfff 100%);
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: scale(1.05);
+  width: 90%;
+  max-width: 1400px;
+  margin: 3rem auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem;
+  
+  @media (min-width: 1024px) {
+    width: 80%;
   }
-`;
-
-const StartContainer = styled.div`
-  text-align: center;
-  padding: 0.5rem 1rem;
 `;
 
 const VisualizationContainer = styled.div`
   background: white;
   padding: 2rem 2.5rem;
   border-radius: 25px;
-  max-width: 1000px;
-  margin: 2rem auto 0;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
 `;
 
 const Table = styled.table`
@@ -52,11 +42,14 @@ const Table = styled.table`
     padding: 0.75rem;
     text-align: center;
     vertical-align: middle;
+    color: #333;
   }
   
   th {
     background: #fafafa;
     vertical-align: middle;
+    font-weight: 600;
+    color: #555;
   }
   
   tr:hover {
@@ -76,6 +69,7 @@ const SelectButton = styled.button`
   border: 1px solid #ddd;
   border-radius: 25px;
   background: white;
+  color: #333;
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 500;
@@ -167,15 +161,21 @@ const ButtonContainer = styled.div`
 
 const RedirectMessage = styled.div`
   background: linear-gradient(135deg, #b84182ff 0%, #ddc9bfff 100%);
-  color: white;
-  padding: 3rem 2rem;
+  padding: 5rem 3rem;
   border-radius: 25px;
-  margin-top: 2rem;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
   box-shadow: 0 4px 20px rgba(184, 65, 130, 0.3);
   animation: fadeIn 0.5s ease-in;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   
   @keyframes fadeIn {
     from {
@@ -187,12 +187,24 @@ const RedirectMessage = styled.div`
       transform: translateY(0);
     }
   }
+  
+  @media (max-width: 768px) {
+    padding: 3rem 2rem;
+    font-size: 1.3rem;
+    min-height: 250px;
+  }
 `;
 
 const CountdownText = styled.div`
-  margin-top: 1rem;
-  font-size: 1.2rem;
+  margin-top: 2rem;
+  font-size: 1.4rem;
+  color: white;
   opacity: 0.9;
+  
+  @media (max-width: 768px) {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+  }
 `;
 
 
@@ -326,21 +338,31 @@ function VisualizationPage() {
     const surveys = (data?.data?.surveys || []).filter(survey => !survey.isViewed);
 
     return (
-        <PageContainer>
-            <PageHeader
-                icon="📊"
-                title={t('VisualizationPage.title')} 
-                subtitle={showRedirectMessage ? t('VisualizationPage.redirect_subtitle') : t('VisualizationPage.subtitle')}
-            />
-            {showRedirectMessage ? (
-                <RedirectMessage>
-                    {t('VisualizationPage.redirect_message')}
-                    <CountdownText>
-                        {t('VisualizationPage.redirect_countdown', { seconds: countdown })}
-                    </CountdownText>
-                </RedirectMessage>
-            ) : isVisualizationStarted ? (
-                <VisualizationContainer>
+        <div className="visualization-page-wrapper">
+            <HeroSection
+                title={t('VisualizationPage.hero_title')}
+                subtitle={!isVisualizationStarted ? t('VisualizationPage.hero_subtitle') : null}
+                primaryButton={!isVisualizationStarted ? {
+                    text: t('VisualizationPage.start_button'),
+                    icon: <FaArrowRight />
+                } : null}
+                onPrimaryClick={handleStartVisualization}
+                minHeight="100vh"
+            >
+                {showRedirectMessage ? (
+                    <PageContainer>
+                        <RedirectMessage>
+                            <div style={{ color: 'white', fontSize: '1.8rem', fontWeight: '600', marginBottom: '1rem' }}>
+                                {t('VisualizationPage.redirect_message')}
+                            </div>
+                            <CountdownText>
+                                {t('VisualizationPage.redirect_countdown', { seconds: countdown })}
+                            </CountdownText>
+                        </RedirectMessage>
+                    </PageContainer>
+                ) : isVisualizationStarted ? (
+                    <PageContainer>
+                        <VisualizationContainer>
                     <VisualizationTitle>{t('VisualizationPage.queue_title')}</VisualizationTitle>
                     
                     {isLoading && <LoadingMessage>{t('VisualizationPage.loading')}</LoadingMessage>}
@@ -404,15 +426,11 @@ function VisualizationPage() {
                             </ButtonContainer>
                         </SelectedSurveyContainer>
                     )}
-                </VisualizationContainer>
-            ) : (
-                <StartContainer>
-                    <StartButton onClick={handleStartVisualization}>
-                        {t('VisualizationPage.start_button')}
-                    </StartButton>
-                </StartContainer>
-            )}
-        </PageContainer>
+                        </VisualizationContainer>
+                    </PageContainer>
+                ) : null}
+            </HeroSection>
+        </div>
     );
 }
 

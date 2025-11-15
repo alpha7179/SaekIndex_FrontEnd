@@ -11,7 +11,12 @@ import surveyEN from '../data/survey.en.json';
 import { surveyAPI } from '../services/api';
 
 const FormContainer = styled.div`
-  background: white; padding: 2rem 2.5rem; border-radius: 25px; max-width: 600px; margin: 0 auto;
+  background: white; 
+  padding: 2rem 2.5rem; 
+  border-radius: 25px; 
+  max-width: 100%; 
+  width: 100%;
+  margin: 0 auto;
 `;
 const SubmitButton = styled.button`
   width: 100%; padding: 1rem; background: linear-gradient(135deg, #b84182ff 0%, #ddc9bfff 100%); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer;

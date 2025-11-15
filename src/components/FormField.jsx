@@ -4,14 +4,15 @@ import styled from '@emotion/styled';
 
 const FormGroup = styled.div`
   margin-bottom: ${props => 
-    props.name && props.name.startsWith('question') ? '3rem' : '2rem'}; 
+    props.name && props.name.startsWith('question') ? '4rem' : '3rem'}; 
 `;
 const Label = styled.label`
   display: block;
   font-weight: 600;
-  color: #555;
+  color: #333;
   margin-bottom: ${props => 
-    (props.type === 'radio' || props.type === 'checkbox') ? '0.5rem' : '0.5rem'};
+    (props.type === 'radio' || props.type === 'checkbox') ? '1rem' : '0.5rem'};
+  text-align: left;
 `;
 const Input = styled.input`
   width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;
@@ -26,7 +27,7 @@ const Textarea = styled.textarea`
   width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; resize: vertical; min-height: 100px;
 `;
 const ErrorMessage = styled.span`
-  color: #ff4757; font-size: 0.875rem; margin-bottom: 1rem; display: block;
+  color: #ff4757; font-size: 0.875rem; margin-bottom: 1rem; display: block; text-align: left;
 `;
 const OptionWrapper = styled.div`
   display: flex; flex-direction: column; align-items: center; gap: 0.25rem; flex: 1;
@@ -131,14 +132,15 @@ const FormField = ({ label, name, type, register, errors, options, validation, m
   
   // 일반 모드일 때는 기존 라디오 버튼 표시
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '2rem' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '2.5rem' }}>
       {options.map((option, index) => (
         <label key={option.value} htmlFor={`${name}-${option.value}`} style={{ 
             display: 'flex', 
             flexDirection: 'column', 
             alignItems: 'center', 
-            gap: '0.25rem', 
-            flex: 1 
+            gap: '0.5rem', 
+            flex: 1,
+            cursor: 'pointer'
         }}>
           <input 
             id={`${name}-${option.value}`}
@@ -148,9 +150,15 @@ const FormField = ({ label, name, type, register, errors, options, validation, m
               ...validationRules,
               setValueAs: (value) => parseInt(value) || 1  // 문자열을 숫자로 변환
             })} 
-            disabled={readOnly} 
+            disabled={readOnly}
+            style={{ cursor: 'pointer', width: '18px', height: '18px' }}
           />
-          <span>{option.label}</span>
+          <span style={{ 
+            color: '#222', 
+            fontSize: '0.95rem',
+            fontWeight: '500',
+            textAlign: 'center'
+          }}>{option.label}</span>
         </label>
       ))}
     </div>

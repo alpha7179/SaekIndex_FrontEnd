@@ -18,7 +18,7 @@ const HeaderContainer = styled.header`
 const Logo = styled(Link)`
   font-size: 1.5rem;
   font-weight: 800;
-  color: #333d4b; /* 토스의 메인 텍스트 색상과 유사하게 */
+  color: #333d4b;/
 `;
 
 const Nav = styled.nav`
@@ -29,12 +29,12 @@ const Nav = styled.nav`
 const NavLink = styled(Link)`
   font-size: 1rem;
   font-weight: 600;
-  color: #4e5968; /* 토스의 메뉴 텍스트 색상과 유사하게 */
+  color: #4e5968;
   padding: 0.5rem;
   
   /* 3. 활성(active) 상태일 때 텍스트 색상을 다르게 표시 */
   &.active {
-    color: #b84182ff; /* 토스의 포인트 색상 */
+    color: #b84182ff; /* 포인트 색상 */
   }
 
   &:hover {

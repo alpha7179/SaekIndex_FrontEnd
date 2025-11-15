@@ -22,10 +22,23 @@ body {
 
 .main-content {
   flex: 1;
+  width: 100%;
+}
+
+/* HomePage, AnalyzePage, VisualizationPage - 여백 제거 */
+.main-content:has(.home-page-wrapper),
+.main-content:has(.analyze-page-wrapper),
+.main-content:has(.visualization-page-wrapper) {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 다른 페이지는 기존 스타일 유지 */
+.main-content:not(:has(.home-page-wrapper)):not(:has(.analyze-page-wrapper)):not(:has(.visualization-page-wrapper)) {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  width: 100%;
 }
 
 /* button style */

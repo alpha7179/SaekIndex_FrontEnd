@@ -2,13 +2,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import SurveyForm from '../components/SurveyForm';
+import HeroSection from '../components/HeroSection';
 import { useTranslation } from 'react-i18next';
-import PageHeader from '../components/PageHeader';
 import { emotionAPI, surveyAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import { FaArrowRight } from 'react-icons/fa';
 
 const PageContainer = styled.div`
-  padding: 3rem 1rem;
+  width: 90%;
+  max-width: 1400px;
+  margin: 3rem auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem;
+  
+  @media (min-width: 1024px) {
+    width: 80%;
+  }
 `;
 
 const StartButton = styled.button`
@@ -998,34 +1009,34 @@ function AnalyzePage() {
   }, []);
 
   return (
-    <PageContainer>
-      <PageHeader
-        icon="📋"
-        title={t('AnalyzePage.title')} 
-        subtitle={t('AnalyzePage.subtitle')}
-      />
-      {isSurveyStarted ? (
-        <>
-          <Video ref={videoRef} autoPlay playsInline muted />
-          <Canvas ref={canvasRef} />
-          <SurveyForm 
-            sessionId={sessionId}
-            onSurveyComplete={handleSurveyComplete}
-          />
-          {isRecording && (
-            <StatusText>
-              🎥 웹캠 녹화 중... (분석 횟수: {frameCount}회)
-            </StatusText>
-          )}
-        </>
-      ) : (
-        <StartContainer>
-          <StartButton onClick={handleStartSurvey}>
-            {t('AnalyzePage.survaystart')}
-          </StartButton>
-        </StartContainer>
-      )}
-    </PageContainer>
+    <div className="analyze-page-wrapper">
+      <HeroSection
+        title={t('AnalyzePage.hero_title')}
+        subtitle={!isSurveyStarted ? t('AnalyzePage.hero_subtitle') : null}
+        primaryButton={!isSurveyStarted ? {
+          text: t('AnalyzePage.survaystart'),
+          icon: <FaArrowRight />
+        } : null}
+        onPrimaryClick={handleStartSurvey}
+        minHeight="100vh"
+      >
+        {isSurveyStarted && (
+          <PageContainer>
+            <Video ref={videoRef} autoPlay playsInline muted />
+            <Canvas ref={canvasRef} />
+            <SurveyForm 
+              sessionId={sessionId}
+              onSurveyComplete={handleSurveyComplete}
+            />
+            {isRecording && (
+              <StatusText>
+                {t('AnalyzePage.recording_status', { count: frameCount })}
+              </StatusText>
+            )}
+          </PageContainer>
+        )}
+      </HeroSection>
+    </div>
   );
 }
 
